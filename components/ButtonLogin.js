@@ -9,7 +9,9 @@ const ButtonLogin = ({ isLoggedIn, name, children, className }) => {
     );
   } else {
     return (
-      <button className={`btn btn-primary ${className}`}>{children}</button>
+      <button className={`btn btn-primary ${className ? className : ""}`}>
+        {children}
+      </button>
     );
   }
 };

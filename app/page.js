@@ -1,6 +1,7 @@
 import ButtonLogin from "@/components/ButtonLogin";
 import Header from "@/components/Header";
 import FaqListItem from "@/components/FaqListItem";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const name = "Marc";
@@ -26,6 +27,102 @@ export default function Home() {
               <ButtonLogin className="shadow-lg font-semibold transition-all hover:scale-105 hover:shadow-xl">
                 Join the waitlist
               </ButtonLogin>
+            </div>
+          </div>
+        </section>
+
+        {/* =======PROBLEM===== */}
+        <section id="problem" className="py-20 bg-base-100">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-base-content mb-6">
+              Why this matters
+            </h2>
+            <p className="text-base-content/70 mb-12 text-lg">
+              Forgotten subscriptions waste your money every month. Managing
+              multiple services across different platforms is hard and
+              time-consuming.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-base-200 p-6 rounded shadow-md hover:shadow-xl transition-all">
+                <h3 className="text-xl font-semibold text-base-content mb-2">
+                  Stop Wasting Money
+                </h3>
+                <p className="text-base-content/70">
+                  Get notified before any charge and avoid unwanted automatic
+                  payments.
+                </p>
+              </div>
+              <div className="bg-base-200 p-6 rounded shadow-md hover:shadow-xl transition-all">
+                <h3 className="text-xl font-semibold text-base-content mb-2">
+                  Track Everything in One Place
+                </h3>
+                <p className="text-base-content/70">
+                  See all your subscriptions together without logging into
+                  multiple accounts.
+                </p>
+              </div>
+              <div className="bg-base-200 p-6 rounded shadow-md hover:shadow-xl transition-all">
+                <h3 className="text-xl font-semibold text-base-content mb-2">
+                  Take Control
+                </h3>
+                <p className="text-base-content/70">
+                  Cancel or manage subscriptions easily with a single click —
+                  simple and stress-free.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =======HOW IT WORKS===== */}
+        <section
+          id="how-it-works"
+          className="py-20 bg-gradient-to-br from-base-200 via-base-100 to-base-200"
+        >
+          <div className="max-w-5xl mx-auto px-4 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-base-content mb-6">
+              How SubStop Works
+            </h2>
+            <p className="text-base-content/70 mb-12 text-lg">
+              Managing your subscriptions is simple, fast, and stress-free.
+            </p>
+            <div className="flex flex-col md:flex-row gap-8">
+              <div className="flex-1 bg-base-100 p-8 rounded shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1">
+                <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center rounded-full bg-primary text-primary-content text-lg font-bold">
+                  1
+                </div>
+                <h3 className="text-xl font-semibold text-base-content mb-2">
+                  Add Your Subscriptions
+                </h3>
+                <p className="text-base-content/70">
+                  Connect your accounts and see all active subscriptions in one
+                  beautiful dashboard.
+                </p>
+              </div>
+              <div className="flex-1 bg-base-100 p-8 rounded shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1">
+                <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center rounded-full bg-primary text-primary-content text-lg font-bold">
+                  2
+                </div>
+                <h3 className="text-xl font-semibold text-base-content mb-2">
+                  Get Smart Alerts
+                </h3>
+                <p className="text-base-content/70">
+                  Receive timely notifications before charges so you can avoid
+                  unwanted payments.
+                </p>
+              </div>
+              <div className="flex-1 bg-base-100 p-8 rounded shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1">
+                <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center rounded-full bg-primary text-primary-content text-lg font-bold">
+                  3
+                </div>
+                <h3 className="text-xl font-semibold text-base-content mb-2">
+                  Take Control
+                </h3>
+                <p className="text-base-content/70">
+                  Cancel subscriptions with a single click and manage your
+                  spending effortlessly.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -83,7 +180,7 @@ export default function Home() {
         </section>
 
         {/* ====FAQ==== */}
-        <section id="pricing" className="py-20 bg-base-200">
+        <section id="faq" className="py-20 bg-base-200">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-base-content mb-12 text-center">
               Frequently Asked Questions
@@ -127,6 +224,7 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }

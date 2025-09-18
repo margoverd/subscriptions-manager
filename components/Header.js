@@ -10,28 +10,16 @@ const Header = () => {
 
         <nav className="hidden md:flex gap-6 font-regular">
           <a
-            href="#features"
+            href="#pricing"
             className="text-primary hover:opacity-80 transition-opacity opacity-70"
           >
-            Features
+            Pricing
           </a>
           <a
-            href="#benefits"
+            href="#faq"
             className="text-primary hover:opacity-80 transition-opacity opacity-70"
           >
-            Benefits
-          </a>
-          <a
-            href="#testimonials"
-            className="text-primary hover:opacity-80 transition-opacity opacity-70"
-          >
-            Testimonials
-          </a>
-          <a
-            href="#cta"
-            className="text-primary hover:opacity-80 transition-opacity opacity-70"
-          >
-            Get Started
+            FAQ
           </a>
         </nav>
 

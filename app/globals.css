@@ -1,7 +1,21 @@
 @import "tailwindcss";
 @plugin "daisyui";
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, cupcake;
+}
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: true; /* эта тема будет по умолчанию */
+
+  --base-100: #252527;
+  --base-200: #151517;
+  --base-300: #09090b;
+  --color-primary: #f34700;
+}
 
 html,
 body {
   overflow-x: hidden;
+  color: #0a0d16;
+  position: relative;
 }

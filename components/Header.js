@@ -14,7 +14,7 @@ const Header = () => {
         backdrop-blur-md
       "
     >
-      <div className="text-2xl text-base-content font-['K2D'] font-normal">
+      <div className="text-2xl text-base-content font-primary font-normal">
         SubStop
       </div>
 

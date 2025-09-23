@@ -2,6 +2,9 @@ import ButtonLogin from "@/components/ButtonLogin";
 import Header from "@/components/Header";
 import FaqListItem from "@/components/FaqListItem";
 import Footer from "@/components/Footer";
+import Image from "next/image";
+import productPhoneDemo from "./productPhoneDemo.png";
+import PhoneDemoBlock from "@/components/PhoneDemoBlock";
 
 export default function Home() {
   const name = "Marc";
@@ -12,22 +15,22 @@ export default function Home() {
       <Header />
       <main>
         {/* =======HERO===== */}
-        <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-center px-4">
-          <div className="max-w-2xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight drop-shadow-md">
-              Keep your money, <br /> not your subscriptions
-            </h1>
-
-            <p className="mt-6 text-lg md:text-xl text-gray-300 leading-relaxed">
-              Track all your subscriptions in one place, get alerts before
-              charges, and cancel unwanted ones with a single tap.
-            </p>
-
-            <div className="mt-10 flex justify-center">
-              <ButtonLogin className="shadow-lg font-semibold transition-all hover:scale-105 hover:shadow-xl">
-                Join the waitlist
-              </ButtonLogin>
+        <section className="bg-[#080816] pt-35 pb-29">
+          <div className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto flex lg:row justify-between">
+            <div className="max-w-140 mt-13">
+              <h1 className="font-bold text-6xl mb-3 text-base-content">
+                Keep your money, not subscriptions
+              </h1>
+              <p className="text-base-content/70 text-xl mb-12">
+                Track all your subscriptions in one place and get notified
+                before any payment — all for free.
+              </p>
+              <div className="flex row gap-8 text-base-content items-center">
+                <ButtonLogin>Join the waitlist</ButtonLogin>
+                <p>🚀 <span className="opacity-60">Join before launch</span></p>
+              </div>
             </div>
+            <PhoneDemoBlock />
           </div>
         </section>
 

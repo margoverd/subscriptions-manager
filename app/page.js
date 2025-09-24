@@ -29,7 +29,7 @@ export default function Home() {
               <div className="flex flex-row flex-wrap gap-4 sm:gap-8 text-base-content items-center justify-start sm:justify-center lg:justify-start">
                 <ButtonLogin>Join the waitlist</ButtonLogin>
                 <p>
-                  🚀 <span className="opacity-60">Join before launch</span>
+                  🚀 <span className="opacity-60 text-sm sm:text-base">Join before launch</span>
                 </p>
               </div>
             </div>

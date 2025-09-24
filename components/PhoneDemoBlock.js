@@ -19,7 +19,7 @@ export default function PhoneDemoBlock() {
         viewBox="0 0 614 736"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute z-0 -top-28 h-auto left-0"
+        className="absolute z-0 -top-28 h-auto left-0 opacity-20 sm:opacity-100"
       >
         <g filter="url(#filter0_f_103_9)">
           <path
@@ -68,7 +68,7 @@ export default function PhoneDemoBlock() {
         viewBox="0 0 513 539"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute z-0 -bottom-55 lg:-right-[20%] sm:right-0 right"
+        className="absolute z-0 -bottom-55 lg:-right-[20%] sm:right-0 right opacity-80 sm:opacity-100"
       >
         <g filter="url(#filter0_f_103_12)">
           <path

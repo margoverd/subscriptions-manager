@@ -10,7 +10,7 @@ const ButtonLogin = ({ isLoggedIn, name, children, className = "" }) => {
   } else {
     return (
       <button
-        className={`btn btn-primary rounded-lg shadow-none py-5.5 px-8.5 bg-primary hover:opacity-90 transition font-normal text-base-content sm:text-lg text-base ${className}`}
+        className={`btn btn-primary rounded-lg shadow-none py-1.5 px-6 sm:py-5.5 sm:px-8.5 bg-primary hover:opacity-90 transition font-normal text-base-content sm:text-lg text-base ${className}`}
       >
         {children}
       </button>

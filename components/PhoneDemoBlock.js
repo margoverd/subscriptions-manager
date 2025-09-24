@@ -3,11 +3,15 @@ import productPhoneDemo from "@/app/productPhoneDemo.png";
 
 export default function PhoneDemoBlock() {
   return (
-    <div className="relative w-full flex items-end justify-end">
+    <div className="relative w-full flex items-end justify-end sm:justify-center">
       <Image
         src={productPhoneDemo}
         alt="Product Demo"
-        className="max-w-none z-5"
+        width={537}
+        height={469}
+        unoptimized
+        className="h-auto w-full max-w-[537px] z-5"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 530px"
       />
       <svg
         width="614"
@@ -15,7 +19,7 @@ export default function PhoneDemoBlock() {
         viewBox="0 0 614 736"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute z-0 top-0"
+        className="absolute z-0 -top-28 h-auto left-0"
       >
         <g filter="url(#filter0_f_103_9)">
           <path
@@ -64,7 +68,7 @@ export default function PhoneDemoBlock() {
         viewBox="0 0 513 539"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute z-0 -bottom-55 -right-[20%]"
+        className="absolute z-0 -bottom-55 lg:-right-[20%] sm:right-0 right"
       >
         <g filter="url(#filter0_f_103_12)">
           <path

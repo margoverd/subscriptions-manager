@@ -29,11 +29,54 @@ export default function Home() {
               <div className="flex flex-row flex-wrap gap-4 sm:gap-8 text-base-content items-center justify-start sm:justify-center lg:justify-start">
                 <ButtonLogin>Join the waitlist</ButtonLogin>
                 <p>
-                  🚀 <span className="opacity-60 text-sm sm:text-base">Join before launch</span>
+                  🚀{" "}
+                  <span className="opacity-60 text-sm sm:text-base">
+                    Join before launch
+                  </span>
                 </p>
               </div>
             </div>
             <PhoneDemoBlock />
+          </div>
+        </section>
+
+        {/* ======PROBLEM===== */}
+        <section className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20 relative z-5">
+          <h2
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-md
+lg:max-w-2xl mx-auto"
+          >
+            Subscriptions are built to make you forget
+          </h2>
+          <p className="text-base lg:text-lg mb-8 sm:mb-10 lg:mb-12 text-center max-w-115 lg:max-w-130 mx-auto opacity-70">
+            Companies make subscriptions automatic, piling up quietly while you
+            lose money without noticing
+          </p>
+          <div className="flex flex-row flex-wrap lg:flex-nowrap gap-5 justify-center">
+            {[
+              {
+                icon: "💸",
+                text: "You keep paying for stuff you forgot",
+              },
+              {
+                icon: "😪",
+                text: "Tracking everything is a mess",
+              },
+              {
+                icon: "😭",
+                text: "Charges hit when you least expect them",
+              },
+            ].map((item) => (
+              <div
+                key={`problem-block-${item}`}
+                className="pt-6 pb-6.5 sm:pt-8 sm:pb-8.5 px-8 flex items-center flex-col gap-4 sm:gap-6 bg-base-300 border-1 rounded-2xl border-base-100 max-w-xs lg:max-w-none w-full"
+              >
+                <span className="text-5xl lg:text-[64px] leading-none">{item.icon}</span>
+                <p className="text-base lg:text-xl opacity-70 max-w-44.5 lg:max-w-52 text-center">
+                  {item.text}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
       </main>

@@ -68,7 +68,7 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-        <div>
+        <div className="col-span-2 sm:col-span-1">
           <h6 className="uppercase text-xl mb-6">Got questions?</h6>
           <a
             href="mailto:margarita0work@gmail.com"

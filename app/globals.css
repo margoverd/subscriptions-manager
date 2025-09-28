@@ -27,3 +27,8 @@ body {
   position: relative;
 }
 
+/* ====================== */
+
+.bg-custom-gradient {
+  background: linear-gradient(341deg, #020306 0%, #0e1323 100%);
+}

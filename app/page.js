@@ -253,12 +253,29 @@ lg:max-w-2xl mx-auto"
                   className="max-w-198.5 mx-auto collapse collapse-arrow bg-base-300 border border-base-100 font-primary"
                 >
                   <input type="radio" name="my-accordion-2" />
-                  <div className="collapse-title sm:text-xl text-lg">{item.q}</div>
+                  <div className="collapse-title sm:text-xl text-lg">
+                    {item.q}
+                  </div>
                   <div className="collapse-content text-sm">{item.a}</div>
                 </div>
               ))}
             </div>
           </div>
+        </section>
+
+        {/* CTA */}
+        <section className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto pt-20 sm:pt-25 lg:pt-30 pb-15 sm:pb-18 lg:pb-20 flex flex-col">
+          <h2
+            className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-2xl
+lg:max-w-172.5 mx-auto"
+          >
+            Ready to stop wasting money on forgotten subscriptions?
+          </h2>
+          <p className="text-base lg:text-lg mb-8 sm:mb-10 lg:mb-12 text-center max-w-115 lg:max-w-130 mx-auto opacity-70">
+            Join early users and take control of your subscriptions today — it’s
+            free forever.
+          </p>
+          <ButtonLogin className="self-center">Join the waitlist</ButtonLogin>
         </section>
       </main>
       <Footer />

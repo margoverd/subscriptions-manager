@@ -43,7 +43,7 @@ export default function Home() {
         {/* ======PROBLEM===== */}
         <section className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20 relative z-5">
           <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-md
+            className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-md
 lg:max-w-2xl mx-auto"
           >
             Subscriptions are built to make you forget
@@ -87,18 +87,22 @@ lg:max-w-2xl mx-auto"
           <div className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20">
             <div className="flex flex-column justify-between items-end flex-wrap sm:gap-3 gap-1 mb-8 sm:mb-10 lg:mb-12">
               <h2
-                className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 max-w-md
-  lg:max-w-2xl"
+                className="text-[28px] sm:text-4xl lg:text-5xl font-bold sm:mb-3 max-w-md
+    lg:max-w-2xl"
               >
                 No more charges for forgotten subscriptions
               </h2>
-              <ButtonLogin>Join the waitlist</ButtonLogin>
+              <ButtonLogin className="sm:flex hidden">
+                Join the waitlist
+              </ButtonLogin>
             </div>
-            <div className="flex justify-between">
-              <div className="flex flex-col gap-12 py-6">
+            <div className="flex justify-between sm:gap-6 flex-wrap lg:flex-nowrap sm:mb-0 mb-8">
+              <div className="flex flex-col lg:gap-12 gap-5 sm:py-6 py-0">
                 <div className="font-primary">
-                  <div className="flex gap-11.5 items-center">
-                    <p className="text-4xl text-base-content">01/</p>
+                  <div className="flex gap-[clamp(20px,2.8vw,46px)] sm:items-center items-start">
+                    <p className="text-[28px] sm:text-4xl text-base-content">
+                      01/
+                    </p>
                     <div>
                       <p className="text-xl">Add your subscriptions</p>
                       <p className="text-base-content/70 text-lg">
@@ -108,8 +112,10 @@ lg:max-w-2xl mx-auto"
                   </div>
                 </div>
                 <div className="font-primary">
-                  <div className="flex gap-8.5 items-center">
-                    <p className="text-4xl text-base-content">02/</p>
+                  <div className="flex gap-[clamp(12px,2vw,34px)] sm:items-center items-start">
+                    <p className="text-[28px] sm:text-4xl text-base-content">
+                      02/
+                    </p>
                     <div>
                       <p className="text-xl">See your stats</p>
                       <p className="text-base-content/70 text-lg">
@@ -119,8 +125,10 @@ lg:max-w-2xl mx-auto"
                   </div>
                 </div>
                 <div className="font-primary">
-                  <div className="flex gap-8.5 items-center">
-                    <p className="text-4xl text-base-content">03/</p>
+                  <div className="flex gap-[clamp(12px,2vw,34px)] sm:items-center items-start">
+                    <p className="text-[28px] sm:text-4xl text-base-content">
+                      03/
+                    </p>
                     <div>
                       <p className="text-xl">Get smart reminders</p>
                       <p className="text-base-content/70 text-lg">
@@ -130,7 +138,7 @@ lg:max-w-2xl mx-auto"
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center items-center max-w-lg w-full bg-base-300 border-1 rounded-2xl border-base-100">
+              <div className="lg:flex hidden justify-center items-center max-w-lg w-full bg-base-300 border-1 rounded-2xl border-base-100">
                 <p className="text-base-content/20 text-sm max-w-xs text-center">
                   Oops, no demo yet :( <br />
                   The final details are still being polished before showing how
@@ -138,6 +146,9 @@ lg:max-w-2xl mx-auto"
                 </p>
               </div>
             </div>
+            <ButtonLogin className="sm:hidden flex">
+              Join the waitlist
+            </ButtonLogin>
           </div>
         </section>
       </main>

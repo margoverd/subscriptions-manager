@@ -164,7 +164,6 @@ lg:max-w-2xl mx-auto"
             No hidden fees. No trials. No limits. Just powerful tools to keep
             your money where it belongs — with you.
           </p>
-          {/* 106.6 */}
           <div
             className="max-w-99 mx-auto p-[1px] rounded-2xl"
             style={{
@@ -205,6 +204,59 @@ lg:max-w-2xl mx-auto"
               </ul>
 
               <ButtonLogin className="w-full">Join the waitlist</ButtonLogin>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="bg-custom-gradient">
+          <div className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20">
+            <h2
+              className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-md
+lg:max-w-2xl mx-auto"
+            >
+              Frequently Asked Questions
+            </h2>
+            <p className="text-base lg:text-lg mb-8 sm:mb-10 lg:mb-12 text-center max-w-115 lg:max-w-130 mx-auto opacity-70">
+              Here’s everything you need to know before you start saving money
+              with SubStop
+            </p>
+            <div className="flex flex-col sm:gap-3 gap-2">
+              {[
+                {
+                  q: "How do I create an account?",
+                  a: "No complicated sign-ups — just join the waitlist and you’ll be first to try SubStop when it’s ready.",
+                },
+                {
+                  q: "Why should I track subscriptions at all?",
+                  a: "Most people forget at least one subscription and waste money every month. SubStop keeps everything visible in one place so you stay in control.",
+                },
+                {
+                  q: "How will SubStop save me money?",
+                  a: "By reminding you before charges hit and showing all your active subscriptions, so you can decide what to keep or cancel.",
+                },
+                {
+                  q: "What makes SubStop different from just writing notes?",
+                  a: "Notes get messy fast. SubStop organizes subscriptions, sends reminders, and gives a clear overview in one place.",
+                },
+                {
+                  q: "Why is it free?",
+                  a: "I’m under 18 and can’t create a Stripe account yet 😅. But it’s a joy to build something useful and share it for free — so you get SubStop without paying a dime!",
+                },
+                {
+                  q: "Is my data safe?",
+                  a: "Absolutely. Your subscription data stays private and secure. It’s never sold or shared with anyone.",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="max-w-198.5 mx-auto collapse collapse-arrow bg-base-300 border border-base-100 font-primary"
+                >
+                  <input type="radio" name="my-accordion-2" />
+                  <div className="collapse-title sm:text-xl text-lg">{item.q}</div>
+                  <div className="collapse-content text-sm">{item.a}</div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

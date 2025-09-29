@@ -9,7 +9,7 @@ export default function PhoneDemoBlock() {
         alt="Product Demo"
         width={537}
         height={469}
-        unoptimized
+        priority
         className="h-auto w-full max-w-[537px] z-5"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 530px"
       />
@@ -35,9 +35,9 @@ export default function PhoneDemoBlock() {
             width="613.384"
             height="753.649"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feBlend
               mode="normal"
               in="SourceGraphic"
@@ -57,8 +57,8 @@ export default function PhoneDemoBlock() {
             y2="510.823"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#F43098" />
-            <stop offset="1" stop-color="#4D4ACC" />
+            <stop stopColor="#F43098" />
+            <stop offset="1" stopColor="#4D4ACC" />
           </linearGradient>
         </defs>
       </svg>
@@ -84,9 +84,9 @@ export default function PhoneDemoBlock() {
             width="512.771"
             height="538.501"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feBlend
               mode="normal"
               in="SourceGraphic"
@@ -106,8 +106,8 @@ export default function PhoneDemoBlock() {
             y2="338.501"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#4D4ACC" />
-            <stop offset="1" stop-color="#00D390" />
+            <stop stopColor="#4D4ACC" />
+            <stop offset="1" stopColor="#00D390" />
           </linearGradient>
         </defs>
       </svg>

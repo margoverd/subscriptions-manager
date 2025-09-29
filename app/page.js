@@ -66,9 +66,9 @@ lg:max-w-2xl mx-auto"
                 icon: "😭",
                 text: "Charges hit when you least expect them",
               },
-            ].map((item) => (
+            ].map((item, i) => (
               <div
-                key={`problem-block-${item}`}
+                key={`problem-block-${i}`}
                 className="pt-6 pb-6.5 sm:pt-8 sm:pb-8.5 px-8 flex items-center flex-col gap-4 sm:gap-6 bg-base-300 border-1 rounded-2xl border-base-100 max-w-xs lg:max-w-none w-full"
               >
                 <span className="text-5xl lg:text-[64px] leading-none">

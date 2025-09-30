@@ -11,7 +11,7 @@ const Footer = () => {
           >
             Sub<span className="text-primary">Stop</span>
           </Link>
-          <p className="pb-3">
+          <p className="pb-3 max-w-90">
             A free tool for keeping your subscriptions under control
           </p>
           <p className="text-base-content/40">

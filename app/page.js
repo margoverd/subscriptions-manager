@@ -26,7 +26,7 @@ export default function Home() {
                 Track all your subscriptions in one place and get notified
                 before any payment — all for free.
               </p>
-              <div className="flex flex-row flex-wrap gap-4 sm:gap-8 text-base-content items-center justify-start sm:justify-center lg:justify-start">
+              <div className="flex flex-row flex-wrap gap-4 sm:gap-8 text-base-content items-center justify-start sm:justify-center lg:justify-start relative z-10">
                 <ButtonLogin>Join the waitlist</ButtonLogin>
                 <p>
                   🚀{" "}
@@ -153,7 +153,10 @@ lg:max-w-2xl mx-auto"
         </section>
 
         {/* Pricing */}
-        <section className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20">
+        <section
+          id="pricing"
+          className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20"
+        >
           <h2
             className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-md
 lg:max-w-2xl mx-auto"
@@ -209,7 +212,7 @@ lg:max-w-2xl mx-auto"
         </section>
 
         {/* FAQ */}
-        <section className="bg-custom-gradient">
+        <section id="faq" className="bg-custom-gradient">
           <div className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20">
             <h2
               className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-md

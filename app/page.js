@@ -1,14 +1,11 @@
 import ButtonLogin from "@/components/ButtonLogin";
 import Header from "@/components/Header";
-import FaqListItem from "@/components/FaqListItem";
 import Footer from "@/components/Footer";
-import Image from "next/image";
-import productPhoneDemo from "./productPhoneDemo.png";
 import PhoneDemoBlock from "@/components/PhoneDemoBlock";
+import { auth } from "@/auth";
 
-export default function Home() {
-  const name = "Marc";
-  const isLoggedIn = true;
+export default async function Home() {
+  const session = await auth();
 
   return (
     <>
@@ -27,7 +24,7 @@ export default function Home() {
                 before any payment — all for free.
               </p>
               <div className="flex flex-row flex-wrap gap-4 sm:gap-8 text-base-content items-center justify-start sm:justify-center lg:justify-start relative z-10">
-                <ButtonLogin>Join the waitlist</ButtonLogin>
+                <ButtonLogin session={session}>Join the waitlist</ButtonLogin>
                 <p>
                   🚀{" "}
                   <span className="opacity-60 text-sm sm:text-base">
@@ -92,7 +89,7 @@ lg:max-w-2xl mx-auto"
               >
                 No more charges for forgotten subscriptions
               </h2>
-              <ButtonLogin className="sm:flex hidden">
+              <ButtonLogin session={session} className="sm:flex hidden">
                 Join the waitlist
               </ButtonLogin>
             </div>
@@ -146,7 +143,7 @@ lg:max-w-2xl mx-auto"
                 </p>
               </div>
             </div>
-            <ButtonLogin className="sm:hidden flex">
+            <ButtonLogin session={session} className="sm:hidden flex">
               Join the waitlist
             </ButtonLogin>
           </div>
@@ -206,7 +203,7 @@ lg:max-w-2xl mx-auto"
                 ))}
               </ul>
 
-              <ButtonLogin className="w-full">Join the waitlist</ButtonLogin>
+              <ButtonLogin session={session} className="w-full">Join the waitlist</ButtonLogin>
             </div>
           </div>
         </section>
@@ -278,7 +275,7 @@ lg:max-w-172.5 mx-auto"
             Join early users and take control of your subscriptions today — it’s
             free forever.
           </p>
-          <ButtonLogin className="self-center">Join the waitlist</ButtonLogin>
+          <ButtonLogin session={session} className="self-center">Join the waitlist</ButtonLogin>
         </section>
       </main>
       <Footer />

@@ -9,7 +9,7 @@ export default async function Home() {
 
   return (
     <>
-      <Header />
+      <Header session={session} />
       <main>
         {/* =======HERO===== */}
         <section className="bg-[#080816] pt-6 z-0">
@@ -203,7 +203,9 @@ lg:max-w-2xl mx-auto"
                 ))}
               </ul>
 
-              <ButtonLogin session={session} className="w-full">Join the waitlist</ButtonLogin>
+              <ButtonLogin session={session} className="w-full">
+                Join the waitlist
+              </ButtonLogin>
             </div>
           </div>
         </section>
@@ -275,7 +277,9 @@ lg:max-w-172.5 mx-auto"
             Join early users and take control of your subscriptions today — it’s
             free forever.
           </p>
-          <ButtonLogin session={session} className="self-center">Join the waitlist</ButtonLogin>
+          <ButtonLogin session={session} className="self-center">
+            Join the waitlist
+          </ButtonLogin>
         </section>
       </main>
       <Footer />

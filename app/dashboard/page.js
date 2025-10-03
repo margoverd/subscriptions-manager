@@ -1,127 +1,40 @@
-export default function Dashboard() {
-  const subscriptions = [
-    {
-      name: "Netflix",
-      price: 15,
-      period: "/mo",
-      nextCharge: "Sep 23",
-      status: "upcoming",
-      logo: "🎬",
-    },
-    {
-      name: "Spotify",
-      price: 10,
-      period: "/mo",
-      nextCharge: "Sep 28",
-      status: "active",
-      logo: "🎵",
-    },
-    {
-      name: "YouTube Premium",
-      price: 12,
-      period: "/mo",
-      nextCharge: "Oct 2",
-      status: "active",
-      logo: "▶️",
-    },
-    {
-      name: "Dropbox",
-      price: 9,
-      period: "/mo",
-      nextCharge: "Sep 20",
-      status: "warning",
-      logo: "☁️",
-    },
-  ];
+import Link from "next/link";
+import ButtonLogout from "@/components/ButtonLogout";
+import { auth } from "@/auth";
 
-  const totalSpend = subscriptions.reduce((sum, sub) => sum + sub.price, 0);
+export default async function Dashboard() {
+  const session = await auth();
 
   return (
-    <div className="min-h-screen bg-base-100 text-base-content px-6 py-10 max-w-7xl mx-auto">
-      {/* Header */}
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-        <div className="grid md:grid-cols-4 gap-6">
-          <div className="bg-base-200 rounded-lg p-4 shadow">
-            <p className="text-sm text-base-content/70">This month you saved</p>
-            <p className="text-2xl font-bold text-primary">$24</p>
-          </div>
-          <div className="bg-base-200 rounded-lg p-4 shadow">
-            <p className="text-sm text-base-content/70">Active subscriptions</p>
-            <p className="text-2xl font-bold">{subscriptions.length}</p>
-          </div>
-          <div className="bg-base-200 rounded-lg p-4 shadow">
-            <p className="text-sm text-base-content/70">Total spend / month</p>
-            <p className="text-2xl font-bold text-error">${totalSpend}</p>
-          </div>
-          <div className="bg-base-200 rounded-lg p-4 shadow">
-            <p className="text-sm text-base-content/70 mb-1">
-              Savings progress
-            </p>
-            <progress
-              className="progress progress-primary w-full"
-              value="40"
-              max="100"
-            ></progress>
-          </div>
-        </div>
-      </header>
+    <main className="bg-custom-gradient min-h-screen flex flex-col items-center justify-center text-center px-5 sm:px-14 lg:px-20 relative">
+      <ButtonLogout className="absolute top-5 left-5">Sign Out</ButtonLogout>
 
-      {/* Filters */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-        <div className="flex gap-3">
-          <button className="btn btn-sm btn-outline">Sort by price</button>
-          <button className="btn btn-sm btn-outline">Sort by date</button>
-        </div>
-        <div className="flex gap-3">
-          <button className="btn btn-sm btn-primary">Upcoming charges</button>
-        </div>
-      </div>
+      <div className="max-w-2xl w-full">
+        <h1 className="font-bold text-[clamp(38px,4.6vw,42px)] sm:text-[clamp(48px,4.6vw,60px)] leading-[1.2] mb-6 text-base-content">
+          Thanks for joining the waitlist, {session?.user?.name || "friend"}!
+        </h1>
+        <p className="font-primary text-base-content/70 lg:text-xl sm:text-lg text-base mb-12 max-w-lg mx-auto">
+          Your dashboard is in progress. Everything will be ready for you before
+          launch!
+        </p>
 
-      {/* Subscriptions Grid */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {subscriptions.map((sub, i) => (
+        <div className="w-full bg-base-100 rounded-full h-2 sm:h-4 mb-4 overflow-hidden relative">
           <div
-            key={i}
-            className="relative p-6 rounded-lg shadow bg-base-200 border border-base-300 transition-all hover:shadow-xl hover:scale-[1.02]"
-          >
-            {/* Badge */}
-            <div className="absolute top-3 right-3">
-              {sub.status === "warning" && (
-                <span className="badge badge-error">Warning</span>
-              )}
-              {sub.status === "upcoming" && (
-                <span className="badge badge-primary">Upcoming</span>
-              )}
-              {sub.status === "active" && (
-                <span className="badge badge-success">Active</span>
-              )}
-            </div>
-
-            <div className="flex items-center gap-3 mb-4">
-              <div className="text-3xl">{sub.logo}</div>
-              <h3 className="text-xl font-semibold">{sub.name}</h3>
-            </div>
-            <p className="text-lg font-bold text-primary">
-              ${sub.price} {sub.period}
-            </p>
-            <p className="text-sm text-base-content/70">
-              Next charge: {sub.nextCharge}
-            </p>
-          </div>
-        ))}
-
-        {/* Add Subscription Card */}
-        <div className="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-dashed border-base-300 text-base-content/70 hover:border-primary hover:text-primary transition-all cursor-pointer">
-          <span className="text-4xl mb-2">＋</span>
-          <p className="font-semibold">Add Subscription</p>
+            className="h-full w-1/4 transition-all duration-500 rounded-full"
+            style={{ background: "linear-gradient(90deg, #F43098, #4D4ACC)" }}
+          ></div>
         </div>
-      </div>
+        <p className="text-base-content/50 mb-8 text-sm sm:text-base">
+          Progress: 25% completed
+        </p>
 
-      {/* Floating Action Button (mobile style) */}
-      <button className="btn btn-primary btn-lg rounded-full shadow-lg fixed bottom-6 right-6 hover:scale-110 transition-transform">
-        ＋
-      </button>
-    </div>
+        <Link
+          href="/"
+          className="btn btn-primary rounded-lg shadow-none py-2 px-6 sm:py-3 sm:px-8 bg-primary hover:opacity-70 transition font-normal text-base-content text-base sm:text-lg"
+        >
+          Back to Home
+        </Link>
+      </div>
+    </main>
   );
 }

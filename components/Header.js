@@ -1,10 +1,9 @@
 import Link from "next/link";
 import ButtonLogin from "./ButtonLogin";
 
-const Header = () => {
+const Header = ({ session }) => {
   return (
     <header className="absolute top-6 left-1/2 -translate-x-1/2 w-full max-w-[1320px] mx-auto px-5 sm:px-14 lg:px-20 z-100">
-      {/* wrapper — фон, бордер, скругления и внутренние паддинги */}
       <div className="w-full bg-base-100/30 border border-base-content/20 rounded-xl py-3.5 px-4 md:px-12 flex items-center justify-between">
         <div className="text-2xl text-base-content font-primary font-normal">
           <Link href="/">
@@ -28,7 +27,7 @@ const Header = () => {
         </nav>
 
         <div>
-          <ButtonLogin className="text-[16px] px-[24px] py-[6px]">
+          <ButtonLogin session={session} className="text-base px-6 py-1.5">
             Get Started
           </ButtonLogin>
         </div>

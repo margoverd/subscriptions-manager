@@ -1,15 +1,12 @@
-import ButtonLogin from "@/components/ButtonLogin";
+import ButtonWaitlist from "@/components/ButtonWaitlist";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PhoneDemoBlock from "@/components/PhoneDemoBlock";
-import { auth } from "@/auth";
 
 export default async function Home() {
-  const session = await auth();
-
   return (
     <>
-      <Header session={session} />
+      <Header />
       <main>
         {/* =======HERO===== */}
         <section className="bg-[#080816] pt-6 z-0">
@@ -19,12 +16,12 @@ export default async function Home() {
               <h1 className="font-bold text-[clamp(38px,4.6vw,42px)] sm:text-[clamp(48px,4.6vw,60px)] leading-[1.2] mb-3 text-base-content max-w-112.5 lg:max-w-none">
                 Keep your money, not subscriptions
               </h1>
-              <p className="font-primary text-base-content/70 lg:text-xl sm:text-lg text-base max-w-100 sm:mx-auto lg:mx-0 sm:mb-12 mb-9 ">
-                Track all your subscriptions in one place and get notified
-                before any payment — all for free.
+              <p className="font-primary text-base-content/70 lg:text-xl sm:text-lg text-base max-w-120 sm:mx-auto lg:mx-0 sm:mb-12 mb-9 ">
+                Track all your subscriptions and get notified before any payment
+                — all in one place .
               </p>
               <div className="flex flex-row flex-wrap gap-4 sm:gap-8 text-base-content items-center justify-start sm:justify-center lg:justify-start relative z-10">
-                <ButtonLogin session={session}>Join the waitlist</ButtonLogin>
+                <ButtonWaitlist>Join the waitlist</ButtonWaitlist>
                 <p>
                   🚀{" "}
                   <span className="opacity-60 text-sm sm:text-base">
@@ -89,9 +86,9 @@ lg:max-w-2xl mx-auto"
               >
                 No more charges for forgotten subscriptions
               </h2>
-              <ButtonLogin session={session} className="sm:flex hidden">
+              <ButtonWaitlist className="sm:flex hidden">
                 Join the waitlist
-              </ButtonLogin>
+              </ButtonWaitlist>
             </div>
             <div className="flex justify-between sm:gap-6 flex-wrap lg:flex-nowrap sm:mb-0 mb-8">
               <div className="flex flex-col lg:gap-12 gap-5 sm:py-6 py-0">
@@ -143,9 +140,9 @@ lg:max-w-2xl mx-auto"
                 </p>
               </div>
             </div>
-            <ButtonLogin session={session} className="sm:hidden flex">
+            <ButtonWaitlist className="sm:hidden flex">
               Join the waitlist
-            </ButtonLogin>
+            </ButtonWaitlist>
           </div>
         </section>
 
@@ -203,9 +200,9 @@ lg:max-w-2xl mx-auto"
                 ))}
               </ul>
 
-              <ButtonLogin session={session} className="w-full">
+              <ButtonWaitlist className="w-full">
                 Join the waitlist
-              </ButtonLogin>
+              </ButtonWaitlist>
             </div>
           </div>
         </section>
@@ -277,9 +274,9 @@ lg:max-w-172.5 mx-auto"
             Join early users and take control of your subscriptions today — it’s
             free forever.
           </p>
-          <ButtonLogin session={session} className="self-center">
+          <ButtonWaitlist className="self-center">
             Join the waitlist
-          </ButtonLogin>
+          </ButtonWaitlist>
         </section>
       </main>
       <Footer />

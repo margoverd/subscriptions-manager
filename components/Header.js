@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ButtonLogin from "./ButtonLogin";
+import ButtonLogin from "./ButtonWaitlist";
 
 const Header = ({ session }) => {
   return (
@@ -27,7 +27,7 @@ const Header = ({ session }) => {
         </nav>
 
         <div>
-          <ButtonLogin session={session} className="text-base px-6 py-1.5">
+          <ButtonLogin className="text-base px-6 py-1.5">
             Get Started
           </ButtonLogin>
         </div>

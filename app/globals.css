@@ -32,3 +32,18 @@ body {
 .bg-custom-gradient {
   background: linear-gradient(341deg, #020306 0%, #0e1323 100%);
 }
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #f43098;
+  border-radius: 8px;
+  border: 2px solid #f0f0f0;
+}

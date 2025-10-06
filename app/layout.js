@@ -19,10 +19,10 @@ export default function RootLayout({ children }) {
         <meta property="og:title" content="SubStop" />
         <meta
           property="og:description"
-          content="Keep your money, not your subscriptions"
+          content="all-in-one subscriptions manager"
         />
         <meta property="og:url" content="https://substop.cc/" />
-        <meta property="og:image" content="/public/images/meta-image.jpg" />
+        <meta property="og:image" content="./public/images/meta-image.jpg" />
       </head>
       <body className={`${inter.className}`}>{children}</body>
     </html>

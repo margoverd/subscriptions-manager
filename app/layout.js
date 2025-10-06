@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
           content="all-in-one subscriptions manager"
         />
         <meta property="og:url" content="https://substop.cc/" />
-        <meta property="og:image" content="./public/images/meta-image.jpg" />
+        <meta property="og:image" content="/images/meta-image.jpg" />
       </head>
       <body className={`${inter.className}`}>{children}</body>
     </html>

@@ -1,7 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 
-// Body по умолчанию Inter
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -12,6 +11,20 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="dark" className={`scroll-smooth`}>
+      <head>
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.svg" type="/public/substop-favicon.svg" />
+
+        {/* Twitter Card */}
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="SubStop" />
+        <meta
+          property="og:description"
+          content="Keep your money, not your subscriptions"
+        />
+        <meta property="og:url" content="https://substop.cc/" />
+        <meta property="og:image" content="/public/images/meta-image.jpg" />
+      </head>
       <body className={`${inter.className}`}>{children}</body>
     </html>
   );

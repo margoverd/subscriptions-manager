@@ -27,8 +27,8 @@ const Header = ({ session }) => {
         </nav>
 
         <div>
-          <ButtonLogin className="text-base px-6 py-1.5">
-            Get Started
+          <ButtonLogin className="text-base px-6 py-1.5 ">
+            Reserve Your Spot
           </ButtonLogin>
         </div>
       </div>

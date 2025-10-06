@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Contact from "./Contacts";
 
 const Footer = () => {
   return (
@@ -12,7 +13,7 @@ const Footer = () => {
             Sub<span className="text-primary">Stop</span>
           </Link>
           <p className="pb-3 max-w-90">
-            A free tool for keeping your subscriptions under control
+            A single hub to see, track, and manage all your subscriptions
           </p>
           <p className="text-base-content/40">
             © 2025 SubStop. All rights reserved.
@@ -71,7 +72,7 @@ const Footer = () => {
         <div className="col-span-2 sm:col-span-1">
           <h6 className="uppercase text-xl mb-6">Got questions?</h6>
           <a
-            href="mailto:margarita0work@gmail.com"
+            href={`mailto:${Contact.email}`}
             className="btn rounded-lg font-intser"
           >
             <svg

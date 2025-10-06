@@ -13,8 +13,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="dark" className={`scroll-smooth`}>
       <head>
-        {/* Favicon */}
-        <link rel="icon" href="substop-favicon.svg" type="image/svg+xml" />
 
         {/* Twitter Card */}
         <meta property="og:type" content="article" />

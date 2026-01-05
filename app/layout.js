@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
     <html lang="en" data-theme="dark" className={`scroll-smooth`}>
       <head>
         {/* Twitter Card */}
-        <meta property="og:type" content="article" />
+        <meta property="og:type" content="summary" />
         <meta property="og:title" content="SubStop" />
         <meta
           property="og:description"
@@ -24,7 +24,10 @@ export default function RootLayout({ children }) {
         <meta property="og:url" content="https://substop.cc/" />
         <meta property="og:image" content="/images/meta-image.jpg" />
       </head>
-      <body className={`${inter.className}`}>{children}</body>
+      <body className={`${inter.className}`}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

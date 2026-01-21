@@ -3,25 +3,22 @@
 @import "tailwindcss";
 @plugin "daisyui";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, cupcake;
+  themes:
+    light --default,
+    dark --prefersdark,
+    cupcake;
 }
 
 @theme {
   --font-primary: "K2D", "sans-serif";
 }
 
-@plugin "daisyui/theme" {
-  name: "dark";
-  default: true; /* эта тема будет по умолчанию */
-
+html,
+body {
   --color-base-100: #252527;
   --color-base-200: #151517;
   --color-base-300: #09090b;
   --color-primary: #f34700;
-}
-
-html,
-body {
   overflow-x: hidden;
   background-color: #0a0d16;
   position: relative;

@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { SessionProvider } from "@/components/SessionProvider";
 
 export default async function LayoutPrivate({ children }) {
   const session = await auth();
@@ -9,5 +10,9 @@ export default async function LayoutPrivate({ children }) {
     redirect("/");
   }
 
-  return children;
+  return (
+    <SessionProvider value={session}>
+      <div className="bg-base-200 min-h-screen relative overflow-hidden">{children}</div>
+    </SessionProvider>
+  );
 }

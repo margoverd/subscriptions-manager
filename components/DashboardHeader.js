@@ -31,9 +31,13 @@ const DashboardHeader = ({ children, extraStyles }) => {
       <div className="max-w-7xl mx-auto">
         <div className="navbar flex justify-between items-center mb-0 p-0">
           <div className="flex gap-2 items-center justify-center">
-            <span className="bg-primary p-2 rounded-full md:block hidden">
-              {/* добавить иконку */}
-            </span>
+            <Image
+              src="/favicon.png"
+              width={40}
+              height={40}
+              alt="Substop logo"
+              className="rounded-lg"
+            />
             <HamburgerAnimated extraStyle={`flex mr-2 md:hidden`} />
             <div className="text-md text-base-content font-primary font-normal">
               <Link href="/">

@@ -50,7 +50,9 @@ export default function MenuAvatarPopover() {
         ) : (
           // Если картинки нет, показываем первую букву имени или иконку
           <div className="w-full h-full flex items-center justify-center text-lg bg-primary/40 text-primary-content shadow-none">
-            {user?.name ? user.name[0].toUpperCase() : "?"}
+            {user?.name
+              ? user.name[0].toUpperCase()
+              : user.email[0].toUpperCase()}
           </div>
         )}
       </button>

@@ -12,7 +12,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="dark" className={`scroll-smooth`}>
-      <body className={`${inter.className}`}>{children}</body>
+      <body
+        className={`${inter.className} pt-(--header-height) bg-base-200 md:pt-0 min-h-screen relative overflow-x-hidden`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

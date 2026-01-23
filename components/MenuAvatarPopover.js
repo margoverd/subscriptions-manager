@@ -5,7 +5,7 @@ import ButtonLogout from "./ButtonLogout";
 import Image from "next/image";
 import { useSession } from "./SessionProvider";
 
-export default function MenuAvatarPopover() {
+export default function MenuAvatarPopover({ extraStyles }) {
   const session = useSession();
   const user = session?.user;
 
@@ -34,7 +34,7 @@ export default function MenuAvatarPopover() {
   }
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className={`relative ${extraStyles}`} ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
         className="btn btn-circle bg-base-300 hover:bg-base-200 overflow-hidden"

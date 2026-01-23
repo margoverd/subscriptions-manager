@@ -38,44 +38,46 @@ export default async function Home() {
         </section>
 
         {/* ======PROBLEM===== */}
-        <section className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20 relative z-5">
-          <h2
-            className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-md
-lg:max-w-2xl mx-auto"
-          >
-            Subscriptions are built to make you forget
-          </h2>
-          <p className="font-primary text-base lg:text-lg mb-8 sm:mb-10 lg:mb-12 text-center max-w-115 lg:max-w-130 mx-auto opacity-70">
-            Companies make subscriptions automatic, piling up quietly while you
-            lose money without noticing
-          </p>
-          <div className="font-primary flex flex-row flex-wrap lg:flex-nowrap gap-5 justify-center">
-            {[
-              {
-                icon: "💸",
-                text: "You keep paying for stuff you forgot",
-              },
-              {
-                icon: "😪",
-                text: "Tracking everything is a mess",
-              },
-              {
-                icon: "😭",
-                text: "Charges hit when you least expect them",
-              },
-            ].map((item, i) => (
-              <div
-                key={`problem-block-${i}`}
-                className="pt-6 pb-6.5 sm:pt-8 sm:pb-8.5 px-8 flex items-center flex-col gap-4 sm:gap-6 bg-base-300 border-1 rounded-2xl border-base-100 max-w-xs lg:max-w-none w-full"
-              >
-                <span className="text-5xl lg:text-[64px] leading-none">
-                  {item.icon}
-                </span>
-                <p className="text-base lg:text-xl opacity-70 max-w-44.5 lg:max-w-52 text-center">
-                  {item.text}
-                </p>
-              </div>
-            ))}
+        <section className="bg-[#0a0d16]">
+          <div className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20 relative z-5">
+            <h2
+              className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-md
+  lg:max-w-2xl mx-auto"
+            >
+              Subscriptions are built to make you forget
+            </h2>
+            <p className="font-primary text-base lg:text-lg mb-8 sm:mb-10 lg:mb-12 text-center max-w-115 lg:max-w-130 mx-auto opacity-70">
+              Companies make subscriptions automatic, piling up quietly while
+              you lose money without noticing
+            </p>
+            <div className="font-primary flex flex-row flex-wrap lg:flex-nowrap gap-5 justify-center">
+              {[
+                {
+                  icon: "💸",
+                  text: "You keep paying for stuff you forgot",
+                },
+                {
+                  icon: "😪",
+                  text: "Tracking everything is a mess",
+                },
+                {
+                  icon: "😭",
+                  text: "Charges hit when you least expect them",
+                },
+              ].map((item, i) => (
+                <div
+                  key={`problem-block-${i}`}
+                  className="pt-6 pb-6.5 sm:pt-8 sm:pb-8.5 px-8 flex items-center flex-col gap-4 sm:gap-6 bg-base-300 border-1 rounded-2xl border-base-100 max-w-xs lg:max-w-none w-full"
+                >
+                  <span className="text-5xl lg:text-[64px] leading-none">
+                    {item.icon}
+                  </span>
+                  <p className="text-base lg:text-xl opacity-70 max-w-44.5 lg:max-w-52 text-center">
+                    {item.text}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -150,62 +152,64 @@ lg:max-w-2xl mx-auto"
         </section>
 
         {/* Pricing */}
-        <section
-          id="pricing"
-          className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20"
-        >
-          <h2
-            className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-md
-lg:max-w-2xl mx-auto"
-          >
-            100% Free. Forever.
-          </h2>
-          <p className="text-base lg:text-lg mb-8 sm:mb-10 lg:mb-12 text-center max-w-115 lg:max-w-130 mx-auto opacity-70">
-            No hidden fees. No trials. No limits. Just powerful tools to keep
-            your money where it belongs — with you.
-          </p>
+        <section className="bg-[#0a0d16]">
           <div
-            className="max-w-99 mx-auto p-[1px] rounded-2xl"
-            style={{
-              background:
-                "linear-gradient(to bottom right, #F43098 0%, #4D4ACC 50%, #F34700 100%)",
-            }}
+            id="pricing"
+            className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto py-15 sm:py-18 lg:py-20"
           >
-            <div className="pt-8 pb-6 lg:px-12 sm:px-10 px-8 bg-base-300 rounded-2xl text-center">
-              <p className="text-xl sm:mb-2 mb-0.5 font-bold">Free Plan</p>
-              <p className="sm:text-5xl text-4xl font-bold">0$</p>
-              <p className="text-base-content/70 sm:text-lg text-sm mb-8">
-                forever
-              </p>
-              <ul className="flex flex-col gap-2 text-sm mb-8 text-left">
-                {[
-                  { pricingText: "Track unlimited subscriptions" },
-                  { pricingText: "Smart reminders before charges" },
-                  { pricingText: "All features included — no paywalls" },
-                  { pricingText: "Lifetime access" },
-                ].map((item, i) => (
-                  <li key={i}>
-                    <svg
-                      width="25"
-                      height="24"
-                      viewBox="0 0 25 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="me-2 inline-block"
-                    >
-                      <path
-                        d="M18.9418 7.20986C18.8476 7.11613 18.7357 7.04174 18.6123 6.99097C18.4889 6.9402 18.3566 6.91406 18.223 6.91406C18.0893 6.91406 17.957 6.9402 17.8336 6.99097C17.7103 7.04174 17.5983 7.11613 17.5042 7.20986L9.96192 14.6699L6.79316 11.5299C6.69545 11.4366 6.5801 11.3633 6.45369 11.3141C6.32729 11.2649 6.19232 11.2408 6.05648 11.2431C5.92063 11.2454 5.78658 11.2741 5.66198 11.3276C5.53738 11.3811 5.42466 11.4583 5.33027 11.5549C5.23588 11.6514 5.16166 11.7653 5.11184 11.8902C5.06203 12.015 5.0376 12.1484 5.03995 12.2825C5.0423 12.4167 5.07138 12.5491 5.12554 12.6722C5.1797 12.7953 5.25786 12.9066 5.35558 12.9999L9.24313 16.8399C9.33725 16.9336 9.44922 17.008 9.57258 17.0588C9.69595 17.1095 9.82828 17.1357 9.96192 17.1357C10.0956 17.1357 10.2279 17.1095 10.3513 17.0588C10.4746 17.008 10.5866 16.9336 10.6807 16.8399L18.9418 8.67986C19.0445 8.58622 19.1265 8.47257 19.1826 8.34607C19.2387 8.21957 19.2677 8.08296 19.2677 7.94486C19.2677 7.80676 19.2387 7.67015 19.1826 7.54365C19.1265 7.41715 19.0445 7.3035 18.9418 7.20986Z"
-                        fill="#00D390"
-                      />
-                    </svg>
-                    <span>{item.pricingText}</span>
-                  </li>
-                ))}
-              </ul>
+            <h2
+              className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-md
+  lg:max-w-2xl mx-auto"
+            >
+              100% Free. Forever.
+            </h2>
+            <p className="text-base lg:text-lg mb-8 sm:mb-10 lg:mb-12 text-center max-w-115 lg:max-w-130 mx-auto opacity-70">
+              No hidden fees. No trials. No limits. Just powerful tools to keep
+              your money where it belongs — with you.
+            </p>
+            <div
+              className="max-w-99 mx-auto p-[1px] rounded-2xl"
+              style={{
+                background:
+                  "linear-gradient(to bottom right, #F43098 0%, #4D4ACC 50%, #F34700 100%)",
+              }}
+            >
+              <div className="pt-8 pb-6 lg:px-12 sm:px-10 px-8 bg-base-300 rounded-2xl text-center">
+                <p className="text-xl sm:mb-2 mb-0.5 font-bold">Free Plan</p>
+                <p className="sm:text-5xl text-4xl font-bold">0$</p>
+                <p className="text-base-content/70 sm:text-lg text-sm mb-8">
+                  forever
+                </p>
+                <ul className="flex flex-col gap-2 text-sm mb-8 text-left">
+                  {[
+                    { pricingText: "Track unlimited subscriptions" },
+                    { pricingText: "Smart reminders before charges" },
+                    { pricingText: "All features included — no paywalls" },
+                    { pricingText: "Lifetime access" },
+                  ].map((item, i) => (
+                    <li key={i}>
+                      <svg
+                        width="25"
+                        height="24"
+                        viewBox="0 0 25 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="me-2 inline-block"
+                      >
+                        <path
+                          d="M18.9418 7.20986C18.8476 7.11613 18.7357 7.04174 18.6123 6.99097C18.4889 6.9402 18.3566 6.91406 18.223 6.91406C18.0893 6.91406 17.957 6.9402 17.8336 6.99097C17.7103 7.04174 17.5983 7.11613 17.5042 7.20986L9.96192 14.6699L6.79316 11.5299C6.69545 11.4366 6.5801 11.3633 6.45369 11.3141C6.32729 11.2649 6.19232 11.2408 6.05648 11.2431C5.92063 11.2454 5.78658 11.2741 5.66198 11.3276C5.53738 11.3811 5.42466 11.4583 5.33027 11.5549C5.23588 11.6514 5.16166 11.7653 5.11184 11.8902C5.06203 12.015 5.0376 12.1484 5.03995 12.2825C5.0423 12.4167 5.07138 12.5491 5.12554 12.6722C5.1797 12.7953 5.25786 12.9066 5.35558 12.9999L9.24313 16.8399C9.33725 16.9336 9.44922 17.008 9.57258 17.0588C9.69595 17.1095 9.82828 17.1357 9.96192 17.1357C10.0956 17.1357 10.2279 17.1095 10.3513 17.0588C10.4746 17.008 10.5866 16.9336 10.6807 16.8399L18.9418 8.67986C19.0445 8.58622 19.1265 8.47257 19.1826 8.34607C19.2387 8.21957 19.2677 8.08296 19.2677 7.94486C19.2677 7.80676 19.2387 7.67015 19.1826 7.54365C19.1265 7.41715 19.0445 7.3035 18.9418 7.20986Z"
+                          fill="#00D390"
+                        />
+                      </svg>
+                      <span>{item.pricingText}</span>
+                    </li>
+                  ))}
+                </ul>
 
-              <ButtonLogin session={session} className="w-full">
-                Join the waitlist
-              </ButtonLogin>
+                <ButtonLogin session={session} className="w-full">
+                  Join the waitlist
+                </ButtonLogin>
+              </div>
             </div>
           </div>
         </section>
@@ -266,20 +270,22 @@ lg:max-w-2xl mx-auto"
         </section>
 
         {/* CTA */}
-        <section className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto pt-20 sm:pt-25 lg:pt-30 pb-15 sm:pb-18 lg:pb-20 flex flex-col">
-          <h2
-            className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-2xl
-lg:max-w-172.5 mx-auto"
-          >
-            Ready to stop wasting money on forgotten subscriptions?
-          </h2>
-          <p className="text-base lg:text-lg mb-8 sm:mb-10 lg:mb-12 text-center max-w-115 lg:max-w-130 mx-auto opacity-70">
-            Join early users and take control of your subscriptions today — it’s
-            free forever.
-          </p>
-          <ButtonLogin session={session} className="self-center">
-            Join the waitlist
-          </ButtonLogin>
+        <section className="bg-[#0a0d16]">
+          <div className="max-w-[1320px] w-full px-5 sm:px-14 lg:px-20 mx-auto pt-20 sm:pt-25 lg:pt-30 pb-15 sm:pb-18 lg:pb-20 flex flex-col">
+            <h2
+              className="text-[28px] sm:text-4xl lg:text-5xl font-bold mb-1 sm:mb-3 text-center max-w-2xl
+  lg:max-w-172.5 mx-auto"
+            >
+              Ready to stop wasting money on forgotten subscriptions?
+            </h2>
+            <p className="text-base lg:text-lg mb-8 sm:mb-10 lg:mb-12 text-center max-w-115 lg:max-w-130 mx-auto opacity-70">
+              Join early users and take control of your subscriptions today —
+              it’s free forever.
+            </p>
+            <ButtonLogin session={session} className="self-center">
+              Join the waitlist
+            </ButtonLogin>
+          </div>
         </section>
       </main>
       <Footer />

@@ -12,7 +12,9 @@ export default async function LayoutPrivate({ children }) {
 
   return (
     <SessionProvider value={session}>
-      <div className="bg-base-200 min-h-screen relative overflow-hidden">{children}</div>
+      <div className="bg-base-200 min-h-screen relative overflow-y-auto">
+        {children}
+      </div>
     </SessionProvider>
   );
 }

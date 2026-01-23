@@ -36,7 +36,7 @@ const DashboardHeader = ({ children, extraStyles }) => {
               width={40}
               height={40}
               alt="Substop logo"
-              className="rounded-lg"
+              className="rounded-lg md:block hidden"
             />
             <HamburgerAnimated extraStyle={`flex mr-2 md:hidden`} />
             <div className="text-md text-base-content font-primary font-normal">

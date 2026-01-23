@@ -19,6 +19,7 @@ body {
   --color-base-200: #151517;
   --color-base-300: #09090b;
   --color-primary: #f34700;
+  --color-accent: #605dff;
   overflow-x: hidden;
   background-color: #0a0d16;
   position: relative;

@@ -9,6 +9,8 @@
     cupcake;
 }
 
+@plugin 'tailwind-scrollbar';
+
 @theme {
   --font-primary: "K2D", "sans-serif";
 }
@@ -29,4 +31,90 @@ body {
 
 .bg-custom-gradient {
   background: linear-gradient(341deg, #020306 0%, #0e1323 100%);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+}
+
+.animate-fadeOut {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease forwards;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease forwards;
+}
+
+@keyframes popUp {
+  from {
+    opacity: 0;
+    transform: translate(0%, 10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0%, 0) scale(1);
+  }
+}
+
+@keyframes popDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-popUp {
+  animation: popUp 0.2s ease-out forwards;
+}
+
+.animate-popDown {
+  animation: popDown 0.2s ease-out forwards;
 }

@@ -39,7 +39,7 @@ const Modal = ({ open, onClose, children }) => {
       <div
         className={`fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 ${
           isClosing ? "animate-fadeOut" : "animate-fadeIn"
-        }`}
+        } scrollbar-thin scrollbar-track-rounded scrollbar-thumb-base-content/30 scrollbar-track-transparent`}
         onClick={handleClose} // клик по фону
       >
         {/* сама модалка */}

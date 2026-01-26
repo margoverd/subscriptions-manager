@@ -6,6 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import EmojiPicker from "emoji-picker-react";
 import Icon from "./Icon";
+import ProjectPicker from "./ProjectPicker";
 
 const FormNewSub = ({ onClose }) => {
   const [showMore, setShowMore] = useState(false);
@@ -58,6 +59,9 @@ const FormNewSub = ({ onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const [showProjectPicker, setShowProjectPicker] = useState(false);
+  const projectRef = useRef(null);
+
   // Переключение проектов (множественный выбор)
   const toggleProject = (project) => {
     setSelectedProjects((prev) =>
@@ -66,6 +70,25 @@ const FormNewSub = ({ onClose }) => {
         : [...prev, project],
     );
   };
+
+  // Если поповер открыт и клик был НЕ по нему
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (projectRef.current && !projectRef.current.contains(e.target)) {
+        // Но также проверяем, чтобы клик не был по самой кнопке "плюс",
+        // иначе он закроется и тут же откроется снова
+        setShowProjectPicker(false);
+      }
+
+      // Остальные проверки (emoji, dropdown)
+      if (emojiRef.current && !emojiRef.current.contains(e.target)) {
+        setShowEmojiPicker(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showProjectPicker]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -130,7 +153,7 @@ const FormNewSub = ({ onClose }) => {
 
         {/* Эмодзи Поповер */}
         {showEmojiPicker && (
-          <div className="absolute z-[100] left-1/2 -translate-x-1/2 top-full mt-2 shadow-2xl border border-white/10 rounded-xl overflow-hidden">
+          <div className="absolute z-[100] left-1/2 -translate-x-1/2 top-full mt-2 shadow-2xl border border-white/10 rounded-xl overflow-hidden animate-popDown">
             <EmojiPicker
               theme="dark"
               onEmojiClick={(emojiData) => {
@@ -246,7 +269,7 @@ const FormNewSub = ({ onClose }) => {
 
       {/* Hidden block */}
       <div
-        className={`transition-all duration-500 ease-in-out overflow-hidden ${
+        className={`transition-all duration-500 ease-in-out ${showMore ? "" : "overflow-hidden"} ${
           showMore ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
@@ -277,14 +300,28 @@ const FormNewSub = ({ onClose }) => {
               );
             })}
 
-            <button
-              // onClick={handleAddProject}
-              className="flex items-center justify-center rounded-full  bg-base-200 border border-base-content/70 hover:border-base-content transition w-6 h-6 cursor-pointer"
-              aria-label="Add project"
-              type="button"
-            >
-              <Icon name="plus" className="text-base-content" />
-            </button>
+            <div className="relative">
+              <button
+                className="flex items-center justify-center rounded-full  bg-base-200 border border-base-content/70 hover:border-base-content transition w-6 h-6 cursor-pointer"
+                aria-label="Add project"
+                type="button"
+                onClick={() => setShowProjectPicker(!showProjectPicker)}
+              >
+                <Icon name="plus" className="text-base-content" />
+              </button>
+
+              {showProjectPicker && (
+                <div
+                  ref={projectRef}
+                  className="animate-popUp absolute z-[110] left-1/2 -translate-x-1/2 bottom-full mb-4"
+                >
+                  <ProjectPicker
+                    selectedProjects={selectedProjects}
+                    setSelectedProjects={setSelectedProjects}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </fieldset>
 

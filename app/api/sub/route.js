@@ -32,6 +32,13 @@ export async function POST(req) {
 
     const user = await User.findById(session.user.id);
 
+    if (!user) {
+      return NextResponse.json(
+        { error: "User not found in database" },
+        { status: 404 },
+      );
+    }
+
     const sub = await Sub.create({
       userId: user._id,
       icon: body.icon,
@@ -42,7 +49,7 @@ export async function POST(req) {
       note: body.note,
     });
 
-    user.sub.push(sub._id);
+    user.subs.push(sub._id);
     await user.save();
 
     return NextResponse.json({});

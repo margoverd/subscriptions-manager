@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
@@ -23,6 +24,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.className} pt-(--header-height) bg-base-200 md:pt-0 min-h-screen relative overflow-x-hidden`}
       >
+        <div>
+          <Toaster />
+        </div>
         {children}
       </body>
     </html>

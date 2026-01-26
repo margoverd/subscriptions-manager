@@ -21,9 +21,12 @@ const subSchema = new mongoose.Schema(
       type: String,
       default: "/mo",
     },
-    projects: {
-      type: String,
-    },
+    projects: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
     icon: {
       type: String,
       default: "☁",

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-// import confetti from "canvas-confetti";
-// import axios from "axios";
-// import toast from "react-hot-toast";
+import confetti from "canvas-confetti";
+import axios from "axios";
+import toast from "react-hot-toast";
 import EmojiPicker from "emoji-picker-react";
 import Icon from "./Icon";
 
@@ -78,54 +78,51 @@ const FormNewSub = ({ onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  //   if (isLoading) return;
-  //   setIsLoading(true);
+    if (isLoading) return;
+    setIsLoading(true);
 
-  //   try {
-  //     const data = await axios.post("/api/wish", {
-  //       title,
-  //       price: Number(price),
-  //       status,
-  //       categories: selected,
-  //       note,
-  //       imageUrl: preview,
-  //     });
+    try {
+      // Отправляем данные на твой новый эндпоинт
+      const data = await axios.post("/api/sub", {
+        icon,
+        name,
+        price: Number(price),
+        unit,
+        projects: selectedProjects,
+        note,
+      });
 
-  //     confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        zIndex: 9999, // Чтобы конфетти было поверх модалки
+      });
 
-  //     const updated = await axios.get("/api/wishes");
+      toast.success("Subscription added! 🎉");
 
-  //     toast.success("Wish created!");
-
-  //     if (onClose) onClose();
-  //   } catch (error) {
-  //     const errorMessage =
-  //       error.response?.data?.error || error.message || "Something went wrong";
-  //     toast.error(errorMessage);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-
-  //   confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-
-  //   if (onClose) onClose();
-  // };
+      if (onClose) onClose({});
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || error.message || "Something went wrong";
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-1 max-w-lg"
-    >
+    <form onSubmit={handleSubmit} className="space-y-1 max-w-lg">
       {/* Icon Upload Area with Emoji Picker Popover */}
       <fieldset className="fieldset relative" ref={emojiRef}>
         <div
           onClick={() => setShowEmojiPicker(!showEmojiPicker)}
           className={`flex flex-col items-center justify-center w-full h-40 border border-dashed rounded-lg cursor-pointer transition relative overflow-hidden border-base-content/40 bg-base-300 hover:border-base-content bg-[url('/emoji-bg.png')] bg-auto bg-center`}
         >
-          <span className="text-5xl mb-2 drop-shadow-md">{icon}</span>
+          <span className="text-4xl mb-2 drop-shadow-md">{icon}</span>
           <p className="font-regular text-lg text-base-content">
             Click to change icon
           </p>
@@ -308,7 +305,7 @@ const FormNewSub = ({ onClose }) => {
       {/* Submit */}
       <button type="submit" className="btn btn-primary w-full mt-2 font-normal">
         {isLoading ? (
-          <span className="loading loading-ring loading-sm"></span>
+          <span className="loading loading-spinner loading-sm"></span>
         ) : (
           <Icon name="plus" className="text-base-content text-xl" />
         )}

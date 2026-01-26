@@ -1,29 +1,38 @@
 import mongoose from "mongoose";
 
-const subSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
+const subSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    unit: {
+      type: String,
+      default: "/mo",
+    },
+    projects: {
+      type: String,
+    },
+    icon: {
+      type: String,
+      default: "☁",
+    },
+    note: {
+      type: String,
+    },
   },
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  projects: {
-    type: String,
-    enum: ["Project 1", "Project 2"],
-  },
-  icon: {enum: "☁", type: String},
-  note: {
-    type: String,
-  },
-});
+  { timestamps: true },
+);
 
 export default mongoose.models.Sub || mongoose.model("Sub", subSchema);

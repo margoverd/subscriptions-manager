@@ -48,7 +48,7 @@ const Modal = ({ open, onClose, children }) => {
           onClick={(e) => e.stopPropagation()} // блокируем клик внутри модалки
         >
           <button
-            className="absolute top-7 left-4 text-sm"
+            className="absolute top-7 left-4 text-sm cursor-pointer"
             onClick={handleClose}
           >
             ✕

@@ -107,7 +107,6 @@ const FilterPanel = ({ extraStyle }) => {
         {["Project 1", "Project 2", "Project 3"].map((cat) => {
           // Проверяем, включен ли конкретный проект в массив выбранных
           const isActive = activeProjects.includes(cat);
-
           return (
             <button
               key={cat}

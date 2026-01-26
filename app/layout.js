@@ -12,6 +12,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="dark" className={`scroll-smooth`}>
+      <head>
+        {/* Unicons */}
+        <link
+          rel="stylesheet"
+          href="https://unicons.iconscout.com/release/v4.2.0/css/line.css"
+        />
+      </head>
+
       <body
         className={`${inter.className} pt-(--header-height) bg-base-200 md:pt-0 min-h-screen relative overflow-x-hidden`}
       >

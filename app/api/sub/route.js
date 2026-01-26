@@ -34,10 +34,11 @@ export async function POST(req) {
 
     const sub = await Sub.create({
       userId: user._id,
+      icon: body.icon,
       name: body.name,
       price: body.price,
+      unit: body.unit,
       projects: body.projects,
-      icon: body.icon,
       note: body.note,
     });
 

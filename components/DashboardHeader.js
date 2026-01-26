@@ -7,6 +7,7 @@ import MenuAvatarPopover from "./MenuAvatarPopover";
 import { useState, useEffect, useRef } from "react";
 import Modal from "./Modal";
 import Image from "next/image";
+import FormNewSub from "./FormNewSub";
 
 const DashboardHeader = ({ children, extraStyles }) => {
   const [open, setOpen] = useState(false);
@@ -55,9 +56,9 @@ const DashboardHeader = ({ children, extraStyles }) => {
           <div className="flex gap-2 items-center">
             <Modal open={open} onClose={handleClose}>
               <p className="text-lg font-normal text-center mb-2">
-                Add a new Wish
+                New Subscription
               </p>
-              {/* <FormNewWish onClose={handleClose} /> */}
+              <FormNewSub onClose={handleClose} />
             </Modal>
 
             <div

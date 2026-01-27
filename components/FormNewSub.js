@@ -10,7 +10,6 @@ import ProjectPicker from "./ProjectPicker";
 
 const FormNewSub = ({ onClose }) => {
   const [showMore, setShowMore] = useState(false);
-  const [selected, setSelected] = useState([]);
 
   const [unit, setUnit] = useState("/mo");
   const [open, setOpen] = useState(false);
@@ -75,12 +74,11 @@ const FormNewSub = ({ onClose }) => {
   useEffect(() => {
     function handleClickOutside(e) {
       if (projectRef.current && !projectRef.current.contains(e.target)) {
-        // Но также проверяем, чтобы клик не был по самой кнопке "плюс",
-        // иначе он закроется и тут же откроется снова
+        // Проверяем, чтобы клик не был по самой кнопке "плюс",
         setShowProjectPicker(false);
       }
 
-      // Остальные проверки (emoji, dropdown)
+      // Проверки emoji, dropdown
       if (emojiRef.current && !emojiRef.current.contains(e.target)) {
         setShowEmojiPicker(false);
       }
@@ -108,7 +106,6 @@ const FormNewSub = ({ onClose }) => {
     setIsLoading(true);
 
     try {
-      // Отправляем данные на твой новый эндпоинт
       const data = await axios.post("/api/sub", {
         icon,
         name,
@@ -118,14 +115,19 @@ const FormNewSub = ({ onClose }) => {
         note,
       });
 
+
       confetti({
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        zIndex: 9999, // Чтобы конфетти было поверх модалки
+        zIndex: 9999,
       });
 
       toast.success("Subscription added! 🎉");
+
+      // setTimeout(() => {
+      //   if (onClose) onClose({});
+      // }, 100);
 
       if (onClose) onClose({});
     } catch (error) {

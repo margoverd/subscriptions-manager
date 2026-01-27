@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
 import Sub from "@/models/Sub";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req) {
   try {
@@ -51,6 +52,8 @@ export async function POST(req) {
 
     user.subs.push(sub._id);
     await user.save();
+
+    revalidatePath("/dashboard");
 
     return NextResponse.json({});
   } catch (error) {

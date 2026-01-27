@@ -115,7 +115,6 @@ const FormNewSub = ({ onClose }) => {
         note,
       });
 
-
       confetti({
         particleCount: 150,
         spread: 70,
@@ -124,10 +123,6 @@ const FormNewSub = ({ onClose }) => {
       });
 
       toast.success("Subscription added! 🎉");
-
-      // setTimeout(() => {
-      //   if (onClose) onClose({});
-      // }, 100);
 
       if (onClose) onClose({});
     } catch (error) {

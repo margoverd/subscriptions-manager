@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { auth } from "@/auth";
 import DashboardHeader from "@/components/DashboardHeader";
 import FilterPanel from "@/components/FilterPanel";
@@ -75,48 +76,47 @@ export default async function Dashboard() {
                   },
                 );
                 return (
-                  <li
-                    key={sub._id}
-                    className="group relative bg-base-100 px-6 pb-6 pt-3 rounded-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer"
-                  >
-                    <div className="flex justify-between flex-wrap items-center mb-6">
-                      <div className="flex items-center gap-1">
-                        <span className="text-2xl leading-tight -ml-1">
-                          {sub.icon}
-                        </span>
-                        {isLongName ? (
-                          <div
-                            className="tooltip tooltip-top before:text-xs before:max-w-50 before:z-1000"
-                            data-tip={sub.name}
-                          >
+                  <Link key={sub._id} href={`/dashboard/s/${sub._id}`}>
+                    <div className="group relative bg-base-100 px-6 pb-6 pt-3 rounded-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                      <div className="flex justify-between flex-wrap items-center mb-6">
+                        <div className="flex items-center gap-1">
+                          <span className="text-2xl leading-tight -ml-1">
+                            {sub.icon}
+                          </span>
+                          {isLongName ? (
+                            <div
+                              className="tooltip tooltip-top before:text-xs before:max-w-50 before:z-1000"
+                              data-tip={sub.name}
+                            >
+                              <h3 className="text-xl font-bold text-white leading-tight">
+                                {displayName}
+                              </h3>
+                            </div>
+                          ) : (
                             <h3 className="text-xl font-bold text-white leading-tight">
-                              {displayName}
+                              {sub.name}
                             </h3>
-                          </div>
-                        ) : (
-                          <h3 className="text-xl font-bold text-white leading-tight">
-                            {sub.name}
-                          </h3>
-                        )}
+                          )}
+                        </div>
+
+                        <span
+                          className={`px-1.5 py-0.5 text-sm font-medium ${badgeClass} rounded-lg`}
+                        >
+                          {badgeText}
+                        </span>
                       </div>
 
-                      <span
-                        className={`px-1.5 py-0.5 text-sm font-medium ${badgeClass} rounded-lg`}
-                      >
-                        {badgeText}
-                      </span>
+                      {/* Нижняя часть: Цена и Дата */}
+                      <div className="flex flex-col">
+                        <p className="text-lg font-bold text-white">
+                          ${sub.price} {sub.unit}
+                        </p>
+                        <p className="text-sm font-normal text-base-content/70">
+                          Next charge: {formattedDate}
+                        </p>
+                      </div>
                     </div>
-
-                    {/* Нижняя часть: Цена и Дата */}
-                    <div className="flex flex-col">
-                      <p className="text-lg font-bold text-white">
-                        ${sub.price} {sub.unit}
-                      </p>
-                      <p className="text-sm font-normal text-base-content/70">
-                        Next charge: {formattedDate}
-                      </p>
-                    </div>
-                  </li>
+                  </Link>
                 );
               })}
             </ul>

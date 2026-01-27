@@ -53,9 +53,7 @@ export async function POST(req) {
     user.subs.push(sub._id);
     await user.save();
 
-    revalidatePath("/dashboard");
-
-    return NextResponse.json({});
+    return NextResponse.json({ sub });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

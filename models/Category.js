@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const projectSchema = new mongoose.Schema(
+const categorySchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -16,5 +16,5 @@ const projectSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export default mongoose.models.Project ||
-  mongoose.model("Project", projectSchema);
+export default mongoose.models.Category ||
+  mongoose.model("Category", categorySchema);

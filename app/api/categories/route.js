@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import connectMongo from "@/libs/mongoose";
-import Project from "@/models/Project";
+import Category from "@/models/Category";
 
-// GET: Получить все проекты текущего юзера
+// GET: Получить все категории текущего юзера
 export async function GET() {
   try {
     const session = await auth();
@@ -11,17 +11,20 @@ export async function GET() {
       return NextResponse.json({ error: "Not authorized" }, { status: 401 });
 
     await connectMongo();
-    const projects = await Project.find({ userId: session.user.id }).sort({
+    const categories = await Category.find({ userId: session.user.id }).sort({
       createdAt: -1,
     });
 
-    return NextResponse.json(projects);
+    return NextResponse.json(categories);
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch categories" },
+      { status: 500 },
+    );
   }
 }
 
-// POST: Создать новый проект
+// POST: Создать новую категорию
 export async function POST(req) {
   try {
     const session = await auth();
@@ -33,18 +36,24 @@ export async function POST(req) {
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
 
     await connectMongo();
-    const newProject = await Project.create({
+    const newCategory = await Category.create({
       userId: session.user.id,
       name,
     });
 
-    return NextResponse.json(newProject);
+    return NextResponse.json(newCategory);
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error.name === "ValidationError") {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }
 
-// PATCH: Редактировать название проекта
+// PATCH: Редактировать название категории
 export async function PATCH(req) {
   try {
     const session = await auth();
@@ -52,21 +61,27 @@ export async function PATCH(req) {
       return NextResponse.json({ error: "Not authorized" }, { status: 401 });
 
     const { id, name } = await req.json();
+    if (!id || !name)
+      return NextResponse.json({ error: "Missing data" }, { status: 400 });
+
     await connectMongo();
 
-    const updatedProject = await Project.findOneAndUpdate(
-      { _id: id, userId: session.user.id }, // проверка владения
+    const updatedCategory = await Category.findOneAndUpdate(
+      { _id: id, userId: session.user.id },
       { name },
       { new: true },
     );
 
-    return NextResponse.json(updatedProject);
+    if (!updatedCategory)
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    return NextResponse.json(updatedCategory);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-// DELETE: Удалить проект
+// DELETE: Удалить категорию
 export async function DELETE(req) {
   try {
     const session = await auth();
@@ -76,7 +91,16 @@ export async function DELETE(req) {
     const { id } = await req.json();
     await connectMongo();
 
-    await Project.findOneAndDelete({ _id: id, userId: session.user.id });
+    const deleted = await Category.findOneAndDelete({
+      _id: id,
+      userId: session.user.id,
+    });
+
+    if (!deleted)
+      return NextResponse.json(
+        { error: "Category not found" },
+        { status: 404 },
+      );
 
     return NextResponse.json({ success: true });
   } catch (error) {

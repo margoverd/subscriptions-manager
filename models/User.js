@@ -19,10 +19,10 @@ const userSchema = new mongoose.Schema({
       ref: "Sub",
     },
   ],
-  projects: [
+  categories: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
+      ref: "Category",
     },
   ],
 });

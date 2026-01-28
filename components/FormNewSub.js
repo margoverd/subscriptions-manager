@@ -6,7 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import EmojiPicker from "emoji-picker-react";
 import Icon from "./Icon";
-import ProjectPicker from "./ProjectPicker";
+import CategoryPicker from "./CategoryPicker";
 
 const FormNewSub = ({ onClose }) => {
   const [showMore, setShowMore] = useState(false);
@@ -15,7 +15,7 @@ const FormNewSub = ({ onClose }) => {
   const [open, setOpen] = useState(false);
   const units = ["/mo", "/y", "/wk"];
 
-  const [selectedProjects, setSelectedProjects] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -58,24 +58,24 @@ const FormNewSub = ({ onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const [showProjectPicker, setShowProjectPicker] = useState(false);
-  const projectRef = useRef(null);
+  const [showCategoryPicker, setShowCategoryPicker] = useState(false);
+  const categoryRef = useRef(null);
 
   // Переключение проектов (множественный выбор)
-  const toggleProject = (project) => {
-    setSelectedProjects((prev) =>
-      prev.includes(project)
-        ? prev.filter((p) => p !== project)
-        : [...prev, project],
+  const toggleCategory = (category) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((p) => p !== category)
+        : [...prev, category],
     );
   };
 
   // Если поповер открыт и клик был НЕ по нему
   useEffect(() => {
     function handleClickOutside(e) {
-      if (projectRef.current && !projectRef.current.contains(e.target)) {
+      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
         // Проверяем, чтобы клик не был по самой кнопке "плюс",
-        setShowProjectPicker(false);
+        setShowCategoryPicker(false);
       }
 
       // Проверки emoji, dropdown
@@ -86,7 +86,7 @@ const FormNewSub = ({ onClose }) => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showProjectPicker]);
+  }, [showCategoryPicker]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -111,7 +111,7 @@ const FormNewSub = ({ onClose }) => {
         name,
         price: Number(price),
         unit,
-        projects: selectedProjects,
+        categories: selectedCategories,
         note,
       });
 
@@ -267,23 +267,23 @@ const FormNewSub = ({ onClose }) => {
       {/* Hidden block */}
       <div
         className={`transition-all duration-500 ease-in-out ${showMore ? "" : "overflow-hidden"} ${
-          showMore ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+          showMore ? "max-h-125 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        {/* Projects */}
+        {/* Categories */}
         <fieldset className="fieldset">
           <legend className="fieldset-legend text-sm font-normal mb-0 pb-0">
-            Projects
+            Categories
           </legend>
 
           <div className="flex flex-wrap items-center gap-2">
             {["Project 1", "Project 2"].map((cat) => {
-              const isActive = selectedProjects.includes(cat);
+              const isActive = selectedCategories.includes(cat);
               return (
                 <button
                   key={cat}
                   type="button"
-                  onClick={() => toggleProject(cat)}
+                  onClick={() => toggleCategory(cat)}
                   className={`relative text-sm px-1.5 py-0.5 rounded-lg transition-all border cursor-pointer
                   ${
                     isActive
@@ -300,21 +300,21 @@ const FormNewSub = ({ onClose }) => {
             <div className="relative">
               <button
                 className="flex items-center justify-center rounded-full  bg-base-200 border border-base-content/70 hover:border-base-content transition w-6 h-6 cursor-pointer"
-                aria-label="Add project"
+                aria-label="Add category"
                 type="button"
-                onClick={() => setShowProjectPicker(!showProjectPicker)}
+                onClick={() => setShowCategoryPicker(!showCategoryPicker)}
               >
                 <Icon name="plus" className="text-base-content" />
               </button>
 
-              {showProjectPicker && (
+              {showCategoryPicker && (
                 <div
-                  ref={projectRef}
-                  className="animate-popUp absolute z-[110] left-1/2 -translate-x-1/2 bottom-full mb-4"
+                  ref={categoryRef}
+                  className="animate-popUp absolute z-110 left-1/2 -translate-x-1/2 bottom-full mb-4"
                 >
-                  <ProjectPicker
-                    selectedProjects={selectedProjects}
-                    setSelectedProjects={setSelectedProjects}
+                  <CategoryPicker
+                    selectedCategories={selectedCategories}
+                    setSelectedCategories={setSelectedCategories}
                   />
                 </div>
               )}

@@ -46,7 +46,7 @@ export async function POST(req) {
       name: body.name,
       price: body.price,
       unit: body.unit,
-      projects: body.projects,
+      categories: body.categories,
       note: body.note,
     });
 

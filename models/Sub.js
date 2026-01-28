@@ -21,7 +21,7 @@ const subSchema = new mongoose.Schema(
       type: String,
       default: "/mo",
     },
-    projects: [
+    categories: [
       {
         type: String,
         trim: true,

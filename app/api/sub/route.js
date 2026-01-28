@@ -58,3 +58,22 @@ export async function POST(req) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(req) {
+  try {
+    const session = await auth();
+    if (!session)
+      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+
+    await connectMongo();
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    await Sub.deleteOne({ _id: id, userId: session.user.id });
+
+    return NextResponse.json({ message: "Deleted successfully" });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}

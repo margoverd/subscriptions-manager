@@ -115,7 +115,7 @@ const NoteEditor = ({ subId, initialNote }) => {
           <button
             type="button"
             onClick={handleEditClick}
-            className="absolute top-4 right-4 p-1 rounded-lg text-base-content/50 hover:text-base-content hover:scale-105 transition-all opacity-0 group-hover:opacity-100 cursor-pointer z-10"
+            className="absolute top-2 right-3 p-1 rounded-lg text-base-content/50 hover:text-base-content hover:scale-105 transition-all opacity-0 group-hover:opacity-100 cursor-pointer z-10"
             title="Edit note"
           >
             <Icon name="edit-alt" className="text-md" />

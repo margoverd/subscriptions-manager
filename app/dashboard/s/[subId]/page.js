@@ -95,7 +95,7 @@ export default async function SubAdminPage({ params }) {
           <div className="flex justify-between items-center">
             <div className="flex items-center flex-wrap gap-1 gap-y-2 mb-2">
               <span className="text-2xl leading-tight -ml-1">{sub.icon}</span>
-              <h3 className="text-xl text-white font-normal leading-tight capitalize mr-4">
+              <h3 className="text-xl text-white font-medium leading-tight capitalize mr-4">
                 {sub.name}
               </h3>
               <span
@@ -104,7 +104,7 @@ export default async function SubAdminPage({ params }) {
                 {badgeText}
               </span>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-1">
               <button
                 // onClick={handleEditSub}
                 className="btn btn-ghost btn-circle shadow-none border-none hover:bg-base-content/20 text-base-content"

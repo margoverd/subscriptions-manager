@@ -26,7 +26,7 @@ const DashboardHeader = ({ children, extraStyles }) => {
 
   return (
     <header
-      className={`fixed md:relative top-0 left-0 right-0 z-45 md:bg-base-300 bg-base-200 md:rounded-xl mb-7 md:p-5 md:py-1 md:mx-10 px-6 py-1 md:my-5 ${extraStyles}`}
+      className={`fixed md:relative top-0 left-0 right-0 z-45 md:bg-base-300 bg-base-200 md:rounded-xl mb-7 md:p-5 md:py-1 md:mx-10 px-6 py-1 md:my-5 ${extraStyles} z-100`}
       ref={headerRef}
     >
       <div className="max-w-7xl mx-auto">
@@ -63,7 +63,7 @@ const DashboardHeader = ({ children, extraStyles }) => {
 
             <div
               className="md:tooltip md:tooltip-bottom"
-              data-tip="Add new wish"
+              data-tip="Add new subscription"
             >
               <button
                 onClick={() => setOpen(true)}

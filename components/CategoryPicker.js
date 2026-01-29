@@ -4,7 +4,11 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Icon from "./Icon";
 
-const CategoryPicker = ({ selectedCategories, setSelectedCategories }) => {
+const CategoryPicker = ({
+  selectedCategories,
+  setSelectedCategories,
+  onCategoriesChange,
+}) => {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [categories, setCategories] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -13,12 +17,19 @@ const CategoryPicker = ({ selectedCategories, setSelectedCategories }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
 
+  const notifyParent = (updatedList) => {
+    if (onCategoriesChange) {
+      onCategoriesChange(updatedList);
+    }
+  };
+
   // 1. Загрузка категорий при открытии
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await axios.get("/api/categories");
         setCategories(res.data);
+        notifyParent(res.data);
       } catch (e) {
         toast.error("Failed to load categories");
       } finally {
@@ -43,7 +54,11 @@ const CategoryPicker = ({ selectedCategories, setSelectedCategories }) => {
       const res = await axios.post("/api/categories", {
         name: newCategoryName,
       });
-      setCategories([res.data, ...categories]);
+      const updatedList = [res.data, ...categories];
+
+      setCategories(updatedList);
+      notifyParent(updatedList);
+
       setNewCategoryName("");
       toast.success("Category created");
     } catch (e) {
@@ -59,8 +74,13 @@ const CategoryPicker = ({ selectedCategories, setSelectedCategories }) => {
     setIsSaving(true);
     try {
       const res = await axios.patch("/api/categories", { id, name: editValue });
-      setCategories(categories.map((c) => (c._id === id ? res.data : c)));
+      const updatedList = categories.map((c) => (c._id === id ? res.data : c));
+
+      notifyParent(updatedList);
+      setCategories(updatedList);
+
       setEditingId(null);
+
       toast.success("Updated");
     } catch (e) {
       toast.error("Update failed");
@@ -79,7 +99,10 @@ const CategoryPicker = ({ selectedCategories, setSelectedCategories }) => {
       // Находим имя удаляемой категории перед тем как убрать её из списка
       const categoryToDelete = categories.find((c) => c._id === id);
 
-      setCategories(categories.filter((c) => c._id !== id));
+      const updatedList = categories.filter((c) => c._id !== id);
+
+      setCategories(updatedList);
+      notifyParent(updatedList);
 
       // Убираем из выбранных, если она там была
       if (categoryToDelete) {

@@ -16,6 +16,8 @@ const FormNewSub = ({ onClose }) => {
   const units = ["/mo", "/y", "/wk"];
 
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [allCategories, setAllCategories] = useState([]);
+  const [isCatsLoading, setIsCatsLoading] = useState(true);
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -63,6 +65,8 @@ const FormNewSub = ({ onClose }) => {
 
   // Переключение проектов (множественный выбор)
   const toggleCategory = (category) => {
+    const name = typeof category === "object" ? category.name : category;
+
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((p) => p !== category)
@@ -97,6 +101,20 @@ const FormNewSub = ({ onClose }) => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await axios.get("/api/categories");
+        setAllCategories(data);
+      } catch (error) {
+        console.error("Failed to load categories:", error);
+      } finally {
+        setIsCatsLoading(false);
+      }
+    };
+    fetchCategories();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -271,55 +289,69 @@ const FormNewSub = ({ onClose }) => {
         }`}
       >
         {/* Categories */}
-        <fieldset className="fieldset">
+        <fieldset className="fieldset relative">
           <legend className="fieldset-legend text-sm font-normal mb-0 pb-0">
             Categories
           </legend>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {["Project 1", "Project 2"].map((cat) => {
-              const isActive = selectedCategories.includes(cat);
-              return (
+          <div className="flex flex-wrap items-center gap-2 min-h-8">
+            {isCatsLoading ? (
+              // Состояние загрузки
+              <div className="flex items-center gap-2 px-1">
+                <span className="text-xs text-base-content/50 font-light">
+                  Loading categories
+                </span>
+                <span className="loading loading-dots loading-xs text-base-content/30"></span>
+              </div>
+            ) : (
+              // Основной контент после загрузки
+              <>
+                {allCategories.map((cat) => {
+                  const isActive = selectedCategories.includes(cat.name);
+                  return (
+                    <button
+                      key={cat._id}
+                      type="button"
+                      onClick={() => toggleCategory(cat.name)}
+                      className={`relative text-sm px-1.5 py-0.5 rounded-lg transition-all border cursor-pointer
+              ${
+                isActive
+                  ? "bg-base-200 border-base-content text-base-content"
+                  : "bg-base-200 border-base-content/40 text-base-content/40"
+              }
+            `}
+                    >
+                      {cat.name}
+                    </button>
+                  );
+                })}
+
                 <button
-                  key={cat}
+                  className="flex items-center justify-center rounded-full bg-base-200 border border-base-content/70 hover:border-base-content transition w-6 h-6 cursor-pointer"
+                  aria-label="Add category"
                   type="button"
-                  onClick={() => toggleCategory(cat)}
-                  className={`relative text-sm px-1.5 py-0.5 rounded-lg transition-all border cursor-pointer
-                  ${
-                    isActive
-                      ? "bg-base-200 border-base-content text-base-content"
-                      : "bg-base-200 border-base-content/40 text-base-content/40"
-                  }
-                `}
+                  onClick={() => setShowCategoryPicker(!showCategoryPicker)}
                 >
-                  {cat}
+                  <Icon name="plus" className="text-base-content" />
                 </button>
-              );
-            })}
-
-            <div className="relative">
-              <button
-                className="flex items-center justify-center rounded-full  bg-base-200 border border-base-content/70 hover:border-base-content transition w-6 h-6 cursor-pointer"
-                aria-label="Add category"
-                type="button"
-                onClick={() => setShowCategoryPicker(!showCategoryPicker)}
-              >
-                <Icon name="plus" className="text-base-content" />
-              </button>
-
-              {showCategoryPicker && (
-                <div
-                  ref={categoryRef}
-                  className="animate-popUp absolute z-110 left-1/2 -translate-x-1/2 bottom-full mb-4"
-                >
-                  <CategoryPicker
-                    selectedCategories={selectedCategories}
-                    setSelectedCategories={setSelectedCategories}
-                  />
-                </div>
-              )}
-            </div>
+              </>
+            )}
           </div>
+
+          {showCategoryPicker && (
+            <div
+              ref={categoryRef}
+              className="animate-popUp absolute z-[110] left-1/2 -translate-x-1/2 bottom-full mb-4 shadow-2xl"
+            >
+              <CategoryPicker
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+                onCategoriesChange={(updatedList) =>
+                  setAllCategories(updatedList)
+                }
+              />
+            </div>
+          )}
         </fieldset>
 
         {/* Note */}

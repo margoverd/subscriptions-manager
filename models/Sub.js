@@ -34,6 +34,10 @@ const subSchema = new mongoose.Schema(
     note: {
       type: String,
     },
+    nextCharge: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true },
 );

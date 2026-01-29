@@ -12,8 +12,10 @@ const ButtonEditSub = ({ subId }) => {
   return (
     <>
       <Modal open={open} onClose={handleClose}>
-        <p className="text-lg font-normal text-center mb-2">New Subscription</p>
-        <FormEditSub onClose={handleClose} />
+        <p className="text-lg font-normal text-center mb-2">
+          Edit Subscription
+        </p>
+        <FormEditSub subId={subId} onClose={handleClose} />
       </Modal>
       <button
         onClick={() => setOpen(true)}

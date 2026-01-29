@@ -7,8 +7,11 @@ import toast from "react-hot-toast";
 import EmojiPicker from "emoji-picker-react";
 import Icon from "./Icon";
 import CategoryPicker from "./CategoryPicker";
+import { useRouter } from "next/navigation";
 
-const FormEditSub = ({ onClose }) => {
+const FormEditSub = ({ onClose, subId }) => {
+  const router = useRouter();
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [showMore, setShowMore] = useState(false);
 
   const [unit, setUnit] = useState("/mo");
@@ -22,31 +25,62 @@ const FormEditSub = ({ onClose }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [note, setNote] = useState("");
+  const [nextCharge, setNextCharge] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [showCategoryPicker, setShowCategoryPicker] = useState(false);
+  const categoryRef = useRef(null);
 
   const [icon, setIcon] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const dropdownRef = useRef(null);
   const emojiRef = useRef(null);
-  const starterEmojis = [
-    "🚀",
-    "⚡",
-    "🎬",
-    "🕹️",
-    "🍿",
-    "🎧",
-    "☁️",
-    "🍕",
-    "☘",
-    "🎨",
-  ];
 
   useEffect(() => {
-    // Ставим рандомную иконку при загрузке формы
-    const randomEmoji =
-      starterEmojis[Math.floor(Math.random() * starterEmojis.length)];
-    setIcon(randomEmoji);
+    if (!subId) return;
 
+    const fetchSubscription = async () => {
+      try {
+        setIsInitialLoading(true);
+        const { data } = await axios.get(`/api/sub?subId=${subId}`);
+
+        setName(data.name || "");
+        setPrice(data.price || "");
+        setUnit(data.unit || "/mo");
+        setIcon(data.icon || "🚀");
+        setNote(data.note || "");
+        setSelectedCategories(data.categories || []);
+
+        // Форматируем дату для input type="date" (YYYY-MM-DD)
+        if (data.nextCharge) {
+          setNextCharge(new Date(data.nextCharge).toISOString().split("T")[0]);
+        }
+      } catch (error) {
+        toast.error("Failed to load subscription data");
+        console.error(error);
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
+
+    fetchSubscription();
+  }, [subId]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await axios.get("/api/categories");
+        setAllCategories(data);
+      } catch (error) {
+        console.error("Failed to load categories:", error);
+      } finally {
+        setIsCatsLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpen(false);
@@ -60,18 +94,23 @@ const FormEditSub = ({ onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const [showCategoryPicker, setShowCategoryPicker] = useState(false);
-  const categoryRef = useRef(null);
-
   // Переключение проектов (множественный выбор)
-  const toggleCategory = (category) => {
-    const name = typeof category === "object" ? category.name : category;
+  const toggleCategory = (categoryName) => {
+    setSelectedCategories((prev) => {
+      // Приводим все к именам (строкам) для простоты сравнения
+      const prevNames = prev.map((item) =>
+        typeof item === "object" ? item.name : item,
+      );
 
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((p) => p !== category)
-        : [...prev, category],
-    );
+      if (prevNames.includes(categoryName)) {
+        return prev.filter(
+          (item) =>
+            (typeof item === "object" ? item.name : item) !== categoryName,
+        );
+      } else {
+        return [...prev, categoryName];
+      }
+    });
   };
 
   // Если поповер открыт и клик был НЕ по нему
@@ -103,35 +142,25 @@ const FormEditSub = ({ onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const { data } = await axios.get("/api/categories");
-        setAllCategories(data);
-      } catch (error) {
-        console.error("Failed to load categories:", error);
-      } finally {
-        setIsCatsLoading(false);
-      }
-    };
-    fetchCategories();
-  }, []);
-
-  const handleSubmit = async (e) => {
+  const handleEditSubscription = async (e) => {
     e.preventDefault();
 
     if (isLoading) return;
     setIsLoading(true);
 
     try {
-      const data = await axios.post("/api/sub", {
+      await axios.patch("/api/sub", {
+        subId,
         icon,
         name,
         price: Number(price),
         unit,
         categories: selectedCategories,
         note,
+        nextCharge,
       });
+
+      router.refresh();
 
       confetti({
         particleCount: 150,
@@ -140,12 +169,13 @@ const FormEditSub = ({ onClose }) => {
         zIndex: 9999,
       });
 
-      toast.success("Subscription added! 🎉");
+      toast.success("Subscription updated! ✨");
 
-      if (onClose) onClose({});
+      setTimeout(() => {
+        if (onClose) onClose();
+      }, 500);
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || error.message || "Something went wrong";
+      const errorMessage = error.response?.data?.error || "Update failed";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -153,7 +183,18 @@ const FormEditSub = ({ onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-1 max-w-lg">
+    <form onSubmit={handleEditSubscription} className="space-y-1 max-w-lg relative">
+
+      {/* Оверлей загрузки */}
+      {isInitialLoading && (
+        <div className="absolute inset-0 z-2000 bg-base-300/70 flex flex-col items-center justify-center animate-fadeIn">
+          <span className="loading loading-spinner loading-lg text-primary"></span>
+          <p className="mt-2 text-sm font-light text-base-content/70">
+            Loading details...
+          </p>
+        </div>
+      )}
+
       {/* Icon Upload Area with Emoji Picker Popover */}
       <fieldset className="fieldset relative" ref={emojiRef}>
         <div
@@ -171,8 +212,8 @@ const FormEditSub = ({ onClose }) => {
           <div className="absolute z-100 left-1/2 -translate-x-1/2 top-full mt-2 shadow-2xl border border-white/10 rounded-xl overflow-hidden animate-popDown">
             <EmojiPicker
               theme="dark"
-              onEmojiClick={(emojiData) => {
-                setIcon(emojiData.emoji);
+              onEmojiClick={(emoji) => {
+                setIcon(emoji.emoji);
                 setShowEmojiPicker(false);
               }}
               autoFocusSearch={false}
@@ -185,19 +226,32 @@ const FormEditSub = ({ onClose }) => {
       </fieldset>
 
       {/* Title and Price */}
+      {/* Title */}
+      <fieldset className="fieldset">
+        <legend className="fieldset-legend text-sm font-normal mb-0 pb-0 ">
+          Title
+        </legend>
+        <input
+          type="text"
+          className="input input-bordered w-full bg-base-300 focus:outline-none capitalize"
+          placeholder="Name"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </fieldset>
+      {/* Next Charge and Price */}
       <div className="grid grid-cols-2 gap-2">
-        {/* Title */}
+        {/* Next Charge */}
         <fieldset className="fieldset">
           <legend className="fieldset-legend text-sm font-normal mb-0 pb-0 ">
-            Title
+            Next charge
           </legend>
           <input
-            type="text"
-            className="input input-bordered w-full bg-base-300 focus:outline-none capitalize"
-            placeholder="Name"
-            required
-            value={name}
-            onChange={(event) => setName(event.target.value)}
+            type="date"
+            className="input input-bordered w-full bg-base-300 text-base-content/70 focus:outline-none capitalize"
+            value={nextCharge}
+            onChange={(e) => setNextCharge(e.target.value)}
           />
         </fieldset>
 
@@ -307,7 +361,14 @@ const FormEditSub = ({ onClose }) => {
             ) : (
               <>
                 {allCategories.map((cat) => {
-                  const isActive = selectedCategories.includes(cat.name);
+                  // Проверяем, есть ли категория с таким именем в массиве выбранных
+                  const isActive = selectedCategories.some((selected) => {
+                    // Если в базе лежат строки - сравниваем строку со строкой
+                    // Если объекты - сравниваем свойство name
+                    const selectedName =
+                      typeof selected === "object" ? selected.name : selected;
+                    return selectedName === cat.name;
+                  });
                   return (
                     <button
                       key={cat._id}
@@ -373,9 +434,9 @@ const FormEditSub = ({ onClose }) => {
         {isLoading ? (
           <span className="loading loading-spinner loading-sm"></span>
         ) : (
-          <Icon name="plus" className="text-base-content text-xl" />
+          <Icon name="check" className="text-base-content text-xl" />
         )}
-        Add New Subscription
+        Save Changes
       </button>
     </form>
   );

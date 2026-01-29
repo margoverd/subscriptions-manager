@@ -3,7 +3,41 @@ import { auth } from "@/auth";
 import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
 import Sub from "@/models/Sub";
-import { revalidatePath } from "next/cache";
+
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const subId = searchParams.get("subId");
+
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+    }
+
+    await connectMongo();
+
+    if (subId) {
+      const sub = await Sub.findOne({
+        _id: subId,
+        userId: session.user.id,
+      });
+
+      if (!subId) {
+        return NextResponse.json(
+          { error: "Subscription not found" },
+          { status: 404 },
+        );
+      }
+
+      return NextResponse.json(sub);
+    }
+
+    const subs = await Sub.find({ userId: session.user.id });
+    return NextResponse.json(subs);
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
 
 export async function POST(req) {
   try {
@@ -48,6 +82,7 @@ export async function POST(req) {
       unit: body.unit,
       categories: body.categories,
       note: body.note,
+      nextCharge: body.nextCharge,
     });
 
     user.subs.push(sub._id);
@@ -104,9 +139,10 @@ export async function DELETE(req) {
 export async function PATCH(req) {
   try {
     const body = await req.json();
-    const { id, note } = body;
+    const { subId, icon, name, price, unit, categories, note, nextCharge } =
+      body;
 
-    if (!id) {
+    if (!subId) {
       return NextResponse.json(
         { error: "Subscription ID is required" },
         { status: 400 },
@@ -122,8 +158,18 @@ export async function PATCH(req) {
     await connectMongo();
 
     const updatedSub = await Sub.findOneAndUpdate(
-      { _id: id, userId: session.user.id },
-      { $set: { note: note } },
+      { _id: subId, userId: session.user.id },
+      {
+        $set: {
+          icon,
+          name,
+          price: Number(price),
+          unit,
+          categories,
+          note,
+          nextCharge,
+        },
+      },
       { new: true },
     );
 

@@ -6,6 +6,7 @@ import Link from "next/link";
 import Icon from "@/components/Icon";
 import MenuAvatarPopover from "@/components/MenuAvatarPopover";
 import ButtonDeleteSub from "@/components/ButtonDeleteSub";
+import NoteEditor from "@/components/NoteEditor";
 
 const getSub = async (subId) => {
   const session = await auth();
@@ -25,7 +26,7 @@ const getSub = async (subId) => {
 };
 
 export default async function SubAdminPage({ params }) {
-  const { subId } = params;
+  const { subId } = await params;
   const sub = await getSub(subId);
 
   const createdAt = new Date(sub.createdAt);
@@ -149,18 +150,7 @@ export default async function SubAdminPage({ params }) {
                 <span className="text-base-content">{formattedNextCharge}</span>
               </p>
             </div>
-            <div>
-              <p className="text-base mb-2 font-normal text-base-content/70">
-                Note:
-              </p>
-              {/* реализовать полноценный редактор, чтобы не нужно было переходить по кнопке редактировать чтобы сохранить заметку. нужно чтобы там как в ProjectPicker была своя кнопка отредактировать (она находится в правом верхнем углу, абсолютом внутри, отступы 16пк.), при редактировании появлялась бы снизу кнопка сохранить или происходило бы авто сохранение, под полем, там должно быть написано на английском сохраняется и после авто сохранено.*/}
-              <textarea
-                type="text"
-                rows={7}
-                className="text-base-content/90 whitespace-pre-line wrap-break-words w-full overflow-auto bg-base-200 border-base-100 rounded-xl h-full p-4 text-xs focus:border-base-content/80"
-                placeholder="Add a comment or reminder..."
-              />
-            </div>
+            <NoteEditor subId={sub._id.toString()} initialNote={sub.note} />
           </div>
         </div>
       </div>

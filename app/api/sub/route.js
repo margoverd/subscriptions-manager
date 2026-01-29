@@ -61,19 +61,81 @@ export async function POST(req) {
 
 export async function DELETE(req) {
   try {
-    const session = await auth();
-    if (!session)
-      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
-
-    await connectMongo();
-
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("subId");
 
-    await Sub.deleteOne({ _id: id, userId: session.user.id });
+    if (!id) {
+      return NextResponse.json(
+        { error: "Subscription ID is required" },
+        { status: 400 },
+      );
+    }
+
+    const session = await auth();
+
+    if (!session) {
+      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+    }
+
+    await connectMongo();
+
+    const result = await Sub.deleteOne({
+      _id: id,
+      userId: session.user.id,
+    });
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json(
+        { error: "Subscription not found" },
+        { status: 404 },
+      );
+    }
+
+    await User.findByIdAndUpdate(session.user.id, {
+      $pull: { subs: id },
+    });
 
     return NextResponse.json({ message: "Deleted successfully" });
-  } catch (e) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function PATCH(req) {
+  try {
+    const body = await req.json();
+    const { id, note } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Subscription ID is required" },
+        { status: 400 },
+      );
+    }
+
+    const session = await auth();
+
+    if (!session) {
+      return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+    }
+
+    await connectMongo();
+
+    const updatedSub = await Sub.findOneAndUpdate(
+      { _id: id, userId: session.user.id },
+      { $set: { note: note } },
+      { new: true },
+    );
+
+    if (!updatedSub) {
+      return NextResponse.json(
+        { error: "Subscription not found" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json(updatedSub);
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

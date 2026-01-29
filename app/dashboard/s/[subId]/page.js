@@ -7,6 +7,7 @@ import Icon from "@/components/Icon";
 import MenuAvatarPopover from "@/components/MenuAvatarPopover";
 import ButtonDeleteSub from "@/components/ButtonDeleteSub";
 import NoteEditor from "@/components/NoteEditor";
+import ButtonEditSub from "@/components/ButtonEditSub";
 
 const getSub = async (subId) => {
   const session = await auth();
@@ -104,13 +105,7 @@ export default async function SubAdminPage({ params }) {
               </span>
             </div>
             <div className="flex gap-1">
-              <button
-                // onClick={handleEditSub}
-                className="btn btn-ghost btn-circle shadow-none border-none hover:bg-base-content/20 text-base-content"
-                aria-label="Edit Sub"
-              >
-                <Icon name="pen" className="text-xl" />
-              </button>
+              <ButtonEditSub subId={sub._id.toString()} />
               <ButtonDeleteSub subId={sub._id.toString()} />
             </div>
           </div>

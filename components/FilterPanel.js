@@ -103,7 +103,7 @@ const FilterPanel = ({ extraStyle }) => {
         Projects
       </p>
 
-      <div className="max-w-screen-xl mx-auto flex flex-wrap gap-2 mb-4">
+      <div className="max-w-7xl mx-auto flex flex-wrap gap-2 mb-4">
         {["Project 1", "Project 2", "Project 3"].map((cat) => {
           // Проверяем, включен ли конкретный проект в массив выбранных
           const isActive = activeProjects.includes(cat);

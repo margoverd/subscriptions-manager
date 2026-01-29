@@ -8,7 +8,7 @@ import EmojiPicker from "emoji-picker-react";
 import Icon from "./Icon";
 import CategoryPicker from "./CategoryPicker";
 
-const FormNewSub = ({ onClose }) => {
+const FormEditSub = ({ onClose }) => {
   const [showMore, setShowMore] = useState(false);
 
   const [unit, setUnit] = useState("/mo");
@@ -381,4 +381,4 @@ const FormNewSub = ({ onClose }) => {
   );
 };
 
-export default FormNewSub;
+export default FormEditSub;

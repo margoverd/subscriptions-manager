@@ -92,11 +92,10 @@ export default async function SubAdminPage({ params }) {
         </nav>
 
         <div className="bg-base-100 rounded-xl md:p-6 p-4">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-baseline">
             <div className="flex items-center flex-wrap gap-1 gap-y-2 mb-2">
-              <span className="text-2xl leading-tight -ml-1">{sub.icon}</span>
               <h3 className="text-xl text-white font-medium leading-tight capitalize mr-4">
-                {sub.name}
+                <span className="text-2xl leading-tight -ml-1">{sub.icon}</span> {sub.name}
               </h3>
               <span
                 className={`px-3 py-0.5 text-sm font-normal rounded-lg bg-success/20 text-success border-success/20 ${badgeClass}`}
@@ -115,7 +114,7 @@ export default async function SubAdminPage({ params }) {
               <ButtonDeleteSub subId={sub._id.toString()} />
             </div>
           </div>
-          <div className="grid md:grid-cols-[1fr_1fr] grid-cols-1 gap-4 items-start">
+          <div className="grid md:grid-cols-[1fr_1fr] grid-cols-1 gap-x-4 gap-y-6 items-start">
             <div>
               <p className="text-xl font-normal text-white mb-4">
                 ${sub.price} {sub.unit}

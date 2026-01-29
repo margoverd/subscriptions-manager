@@ -95,12 +95,12 @@ const NoteEditor = ({ subId, initialNote }) => {
             ref={textareaRef}
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            rows={7}
+            rows={6}
             className="text-base-content/90 whitespace-pre-line break-all w-full bg-base-200 border border-base-content/30 rounded-xl h-full p-4 text-xs focus:outline-none ring-1 ring-base-content/10 shadow-inner animate-in fade-in duration-200"
             placeholder="Add a comment or reminder..."
           />
         ) : (
-          <div className="text-base-content/90 whitespace-pre-line [word-break:break-word] overflow-wrap-anywhere w-full bg-base-200 border border-base-100 rounded-xl min-h-36.5 p-4 text-xs transition-all">
+          <div className="text-base-content/90 whitespace-pre-line [word-break:break-word] overflow-wrap-anywhere w-full bg-base-200 border border-base-100 rounded-xl min-h-32.5 p-4 text-xs transition-all">
             {note ? (
               renderNoteWithLinks(note)
             ) : (

@@ -188,12 +188,12 @@ const FormNewSub = ({ onClose }) => {
       <div className="grid grid-cols-2 gap-2">
         {/* Title */}
         <fieldset className="fieldset">
-          <legend className="fieldset-legend text-sm font-normal mb-0 pb-0">
+          <legend className="fieldset-legend text-sm font-normal mb-0 pb-0 ">
             Title
           </legend>
           <input
             type="text"
-            className="input input-bordered w-full bg-base-300 focus:outline-none"
+            className="input input-bordered w-full bg-base-300 focus:outline-none capitalize"
             placeholder="Name"
             required
             value={name}
@@ -212,6 +212,8 @@ const FormNewSub = ({ onClose }) => {
               type="number"
               className="input input-bordered w-full bg-base-300 focus:outline-none"
               placeholder="0.00 €"
+              min="0"
+              step="0.01"
               value={price}
               onChange={(event) => setPrice(event.target.value)}
             />
@@ -274,7 +276,7 @@ const FormNewSub = ({ onClose }) => {
         <span className="flex items-center gap-1 text-sm text-gray-500">
           {showMore ? "Less options" : "More options"}
           <Icon
-            name="angle-down" // Имя иконки Unicons
+            name="angle-down"
             className={`transform transition-transform duration-300 fill-base-content ${
               showMore ? "-rotate-180" : "rotate-0"
             }`}
@@ -296,7 +298,6 @@ const FormNewSub = ({ onClose }) => {
 
           <div className="flex flex-wrap items-center gap-2 min-h-8">
             {isCatsLoading ? (
-              // Состояние загрузки
               <div className="flex items-center gap-2 px-1">
                 <span className="text-xs text-base-content/50 font-light">
                   Loading categories
@@ -304,7 +305,6 @@ const FormNewSub = ({ onClose }) => {
                 <span className="loading loading-dots loading-xs text-base-content/30"></span>
               </div>
             ) : (
-              // Основной контент после загрузки
               <>
                 {allCategories.map((cat) => {
                   const isActive = selectedCategories.includes(cat.name);
@@ -314,12 +314,12 @@ const FormNewSub = ({ onClose }) => {
                       type="button"
                       onClick={() => toggleCategory(cat.name)}
                       className={`relative text-sm px-1.5 py-0.5 rounded-lg transition-all border cursor-pointer
-              ${
-                isActive
-                  ? "bg-base-200 border-base-content text-base-content"
-                  : "bg-base-200 border-base-content/40 text-base-content/40"
-              }
-            `}
+                      ${
+                        isActive
+                          ? "bg-base-200 border-base-content text-base-content"
+                          : "bg-base-200 border-base-content/40 text-base-content/40"
+                      }
+                    `}
                     >
                       {cat.name}
                     </button>
@@ -341,7 +341,7 @@ const FormNewSub = ({ onClose }) => {
           {showCategoryPicker && (
             <div
               ref={categoryRef}
-              className="animate-popUp absolute z-[110] left-1/2 -translate-x-1/2 bottom-full mb-4 shadow-2xl"
+              className="animate-popUp absolute z-110 left-1/2 -translate-x-1/2 bottom-full mb-4 shadow-2xl"
             >
               <CategoryPicker
                 selectedCategories={selectedCategories}

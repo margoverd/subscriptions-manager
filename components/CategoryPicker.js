@@ -71,7 +71,8 @@ const CategoryPicker = ({ selectedCategories, setSelectedCategories }) => {
 
   // 4. Удаление категории
   const deleteCategory = async (id) => {
-    if (!confirm("Are you sure?")) return;
+    if (!confirm("Are you sure you want to delete this?")) return;
+
     try {
       await axios.delete("/api/categories", { data: { id } });
 

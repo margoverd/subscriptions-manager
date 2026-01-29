@@ -68,7 +68,7 @@ export async function DELETE(req) {
     await connectMongo();
 
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get("id");
+    const id = searchParams.get("subId");
 
     await Sub.deleteOne({ _id: id, userId: session.user.id });
 

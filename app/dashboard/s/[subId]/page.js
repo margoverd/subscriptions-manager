@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import Link from "next/link";
 import Icon from "@/components/Icon";
 import MenuAvatarPopover from "@/components/MenuAvatarPopover";
+import ButtonDeleteSub from "@/components/ButtonDeleteSub";
 
 const getSub = async (subId) => {
   const session = await auth();
@@ -110,13 +111,7 @@ export default async function SubAdminPage({ params }) {
               >
                 <Icon name="pen" className="text-xl" />
               </button>
-              <button
-                // onClick={handleDeleteSub}
-                className="btn btn-ghost btn-circle text-error border-none shadow-none hover:bg-error/20"
-                aria-label="Delete Sub"
-              >
-                <Icon name="trash-alt" className="text-xl" />
-              </button>
+              <ButtonDeleteSub subId={sub._id.toString()} />
             </div>
           </div>
           <div className="grid md:grid-cols-[1fr_1fr] grid-cols-1 gap-4 items-start">

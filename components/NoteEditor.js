@@ -11,11 +11,27 @@ const NoteEditor = ({ subId, initialNote }) => {
   const textareaRef = useRef(null);
   const containerRef = useRef(null);
 
+  // Функция для автоматического изменения высоты
+  const adjustHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto"; // Сначала сбрасываем
+      textarea.style.height = `${textarea.scrollHeight}px`; // Ставим высоту контента
+    }
+  };
+
+  // Вызываем подстройку высоты при изменении текста или включении режима редактирования
+  useEffect(() => {
+    if (isEditing) {
+      adjustHeight();
+    }
+  }, [note, isEditing]);
+
   const saveNote = async (newValue) => {
     setStatus("Saving...");
     try {
       await axios.patch(`/api/sub`, {
-        id: subId,
+        subId: subId,
         note: newValue,
       });
       setStatus("Saved!");
@@ -94,9 +110,11 @@ const NoteEditor = ({ subId, initialNote }) => {
           <textarea
             ref={textareaRef}
             value={note}
-            onChange={(e) => setNote(e.target.value)}
-            rows={6}
-            className="text-base-content/90 whitespace-pre-line break-all w-full bg-base-200 border border-base-content/30 rounded-xl h-full p-4 text-xs focus:outline-none ring-1 ring-base-content/10 shadow-inner animate-in fade-in duration-200"
+            onChange={(e) => {
+              setNote(e.target.value);
+              adjustHeight();
+            }}
+            className="overflow-hidden text-base-content/90 whitespace-pre-line break-all w-full bg-base-200 border border-base-content/30 rounded-xl h-full p-4 text-xs focus:outline-none ring-1 ring-base-content/10 shadow-inner animate-in fade-in duration-200"
             placeholder="Add a comment or reminder..."
           />
         ) : (

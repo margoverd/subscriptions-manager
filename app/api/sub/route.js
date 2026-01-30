@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
 import Sub from "@/models/Sub";
+import Category from "@/models/Category";
 
 export async function GET(req) {
   try {
@@ -16,24 +17,40 @@ export async function GET(req) {
 
     await connectMongo();
 
+    // Сначала получаем список имен всех существующих категорий
+    const existingCats = await Category.find({}, "name");
+    const existingNames = existingCats.map((c) => c.name);
+
     if (subId) {
       const sub = await Sub.findOne({
         _id: subId,
         userId: session.user.id,
       });
 
-      if (!subId) {
-        return NextResponse.json(
-          { error: "Subscription not found" },
-          { status: 404 },
-        );
+      if (!sub) {
+        return NextResponse.json({ error: "Sub not found" }, { status: 404 });
       }
 
-      return NextResponse.json(sub);
+      // Фильтруем категории "на лету"
+      const subObj = sub.toObject();
+      subObj.categories = (subObj.categories || []).filter((cat) =>
+        existingNames.includes(cat),
+      );
+
+      return NextResponse.json(subObj);
     }
 
+    // Если subId нет, отдаем все подписки пользователя
     const subs = await Sub.find({ userId: session.user.id });
-    return NextResponse.json(subs);
+    const filteredSubs = subs.map((sub) => {
+      const s = sub.toObject();
+      s.categories = (s.categories || []).filter((cat) =>
+        existingNames.includes(cat),
+      );
+      return s;
+    });
+
+    return NextResponse.json(filteredSubs);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -139,8 +156,7 @@ export async function DELETE(req) {
 export async function PATCH(req) {
   try {
     const body = await req.json();
-    const { subId, icon, name, price, unit, categories, note, nextCharge } =
-      body;
+    const subId = body.subId || body.id;
 
     if (!subId) {
       return NextResponse.json(
@@ -150,26 +166,29 @@ export async function PATCH(req) {
     }
 
     const session = await auth();
-
     if (!session) {
       return NextResponse.json({ error: "Not authorized" }, { status: 401 });
     }
 
     await connectMongo();
 
+    // Создаем объект обновления динамически
+    const updateData = {};
+
+    if (body.icon !== undefined) updateData.icon = body.icon;
+    if (body.name !== undefined) updateData.name = body.name;
+    if (body.unit !== undefined) updateData.unit = body.unit;
+    if (body.categories !== undefined) updateData.categories = body.categories;
+    if (body.note !== undefined) updateData.note = body.note;
+    if (body.nextCharge !== undefined) updateData.nextCharge = body.nextCharge;
+
+    if (body.price !== undefined) {
+      updateData.price = Number(body.price);
+    }
+
     const updatedSub = await Sub.findOneAndUpdate(
       { _id: subId, userId: session.user.id },
-      {
-        $set: {
-          icon,
-          name,
-          price: Number(price),
-          unit,
-          categories,
-          note,
-          nextCharge,
-        },
-      },
+      { $set: updateData },
       { new: true },
     );
 
@@ -182,6 +201,7 @@ export async function PATCH(req) {
 
     return NextResponse.json(updatedSub);
   } catch (error) {
+    console.error("PATCH ERROR:", error); // Это поможет тебе видеть детали в терминале
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

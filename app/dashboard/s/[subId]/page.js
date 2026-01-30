@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import connectMongo from "@/libs/mongoose";
 import Sub from "@/models/Sub";
+import Category from "@/models/Category";
 import { auth } from "@/auth";
 import Link from "next/link";
 import Icon from "@/components/Icon";
@@ -23,7 +24,15 @@ const getSub = async (subId) => {
     redirect("/dashboard");
   }
 
-  return sub;
+  const existingCats = await Category.find({}, "name");
+  const existingNames = existingCats.map((c) => c.name);
+
+  const subObj = sub.toObject();
+  subObj.categories = (subObj.categories || []).filter((cat) =>
+    existingNames.includes(cat),
+  );
+
+  return subObj;
 };
 
 export default async function SubAdminPage({ params }) {

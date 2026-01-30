@@ -94,8 +94,8 @@ const CategoryPicker = ({
     if (!confirm("Are you sure you want to delete this?")) return;
 
     try {
-      await axios.delete("/api/categories", { data: { id } });
-
+      await axios.delete(`/api/categories?id=${id}`);
+      
       // Находим имя удаляемой категории перед тем как убрать её из списка
       const categoryToDelete = categories.find((c) => c._id === id);
 

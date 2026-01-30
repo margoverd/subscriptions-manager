@@ -2,6 +2,7 @@ import DashboardHeader from "@/components/DashboardHeader";
 import { auth } from "@/auth";
 import connectMongo from "@/libs/mongoose";
 import Sub from "@/models/Sub";
+import { getSubData } from "@/libs/constants";
 
 export default async function Statistic() {
   await connectMongo();
@@ -12,14 +13,20 @@ export default async function Statistic() {
   // 1. Получаем подписки пользователя
   const subs = await Sub.find({ userId: session.user.id });
 
-  // Вычисляем общую сумму в месяц (нормализация /y и /mo)
+  // 2. Предварительно обрабатываем данные каждой подписки через твою функцию getSubData
+  const subsWithData = subs.map((sub) => ({
+    ...sub.toObject(),
+    meta: getSubData(sub), // здесь лежат diffDays и badge (Warning/Upcoming/Active)
+  }));
+
+  // Вычисляем общую сумму в месяц
   const totalMonthly = subs.reduce((acc, sub) => {
     let price = Number(sub.price) || 0;
     if (sub.unit === "/y") price = price / 12;
     return acc + price;
   }, 0);
 
-  // Ищем самую дорогую (приведенную к месяцу)
+  // Ищем самую дорогую
   const mostExpensiveSub =
     subs.length > 0
       ? subs.reduce((prev, curr) => {
@@ -28,31 +35,20 @@ export default async function Statistic() {
         })
       : null;
 
-  // Ближайший платеж (сортируем по дате nextCharge)
-  const upcomingSub = subs
-    .filter((s) => s.nextCharge) // берем только те, где есть дата
+  // Ближайший платеж (используем уже отсортированные данные)
+  const upcomingSub = subsWithData
+    .filter((s) => s.nextCharge)
     .sort((a, b) => new Date(a.nextCharge) - new Date(b.nextCharge))[0];
 
-  // Функция для расчета "через сколько дней" без сторонних библиотек
-  const getDaysUntil = (dateString) => {
-    if (!dateString) return "—";
-
-    const target = new Date(dateString);
-    const today = new Date();
-
-    // Обнуляем часы, чтобы считать только чистые дни
-    target.setHours(0, 0, 0, 0);
-    today.setHours(0, 0, 0, 0);
-
-    const diffInMs = target - today;
-    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
-
-    if (diffInDays < 0) return "passed";
-    if (diffInDays === 0) return "today";
-    if (diffInDays === 1) return "1 day";
-    return `${diffInDays} days`;
+  // Определяем стили для карточки ближайшего платежа на основе твоего badge.text
+  const getStatusColor = (status) => {
+    if (status === "Warning") return "bg-error/10 border border-error/50";
+    if (status === "Upcoming") return "bg-warning/10 border border-warning/50";
+    return "bg-base-100";
   };
 
+  const statusInfo = upcomingSub?.meta?.badge;
+  
   return (
     <>
       <DashboardHeader />
@@ -135,7 +131,9 @@ export default async function Statistic() {
               <p className="text-xs text-base-content mb-6">Most expensive</p>
               <p className="text-3xl font-bold text-primary-content">
                 ${mostExpensiveSub?.price || "0"}
-                <span className="font-normal text-[12px]">{mostExpensiveSub?.unit}</span>
+                <span className="font-normal text-[12px]">
+                  {mostExpensiveSub?.unit}
+                </span>
               </p>
               <div className="absolute bottom-4 right-4 h-10 w-10 flex items-center justify-center rounded-full bg-accent/10">
                 <svg

@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-// for safety
 import { signIn } from "next-auth/react";
 
 const ButtonLogin = ({ session, children, className = "" }) => {

@@ -51,12 +51,13 @@ const FormEditSub = ({ onClose, subId }) => {
         setNote(data.note || "");
         setSelectedCategories(data.categories || []);
 
-        // Берем дату из базы (data.nextCharge).
-        // Если она там есть, превращаем её в формат YYYY-MM-DD
         if (data.nextCharge) {
           const dateObj = new Date(data.nextCharge);
-          const formattedDate = dateObj.toISOString().split("T")[0];
-          setNextCharge(formattedDate);
+          // Используем локальное время, чтобы избежать смещения часовых поясов (Z)
+          const year = dateObj.getFullYear();
+          const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+          const day = String(dateObj.getDate()).padStart(2, "0");
+          setNextCharge(`${year}-${month}-${day}`);
         }
       } catch (error) {
         toast.error("Failed to load subscription data");

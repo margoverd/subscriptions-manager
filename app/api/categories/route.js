@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import connectMongo from "@/libs/mongoose";
 import Category from "@/models/Category";
+import Sub from "@/models/Sub";
 
 // GET: Получить все категории текущего юзера
 export async function GET() {
@@ -60,25 +61,35 @@ export async function PATCH(req) {
     if (!session)
       return NextResponse.json({ error: "Not authorized" }, { status: 401 });
 
-    const { id, name: newName } = await req.json();
+    const body = await req.json();
+    const { id, name: newName } = body;
+
+    if (!id || !newName) {
+      return NextResponse.json(
+        { error: "ID and Name are required" },
+        { status: 400 },
+      );
+    }
+
     await connectMongo();
 
-    // 1. Находим старое имя
+    // 1. Находим категорию
     const oldCategory = await Category.findOne({
       _id: id,
       userId: session.user.id,
     });
+
     if (!oldCategory)
       return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     const oldName = oldCategory.name;
 
-    // 2. Обновляем категорию
+    // 2. Обновляем саму категорию
     oldCategory.name = newName;
     await oldCategory.save();
 
-    // 3. Обновляем имя во всех подписках, где оно встречалось
-    // Используем позиционный оператор $[], чтобы обновить все элементы массива, совпавшие с условием
+    // 3. Обновляем имя во всех подписках юзера
+    // Пользуемся тем, что Mongo умеет искать и заменять элементы в массивах
     await Sub.updateMany(
       { userId: session.user.id, categories: oldName },
       { $set: { "categories.$[elem]": newName } },
@@ -87,6 +98,7 @@ export async function PATCH(req) {
 
     return NextResponse.json(oldCategory);
   } catch (error) {
+    console.error("PATCH CATEGORY ERROR:", error); // Чтобы видеть ошибку в терминале
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -98,10 +110,15 @@ export async function DELETE(req) {
     if (!session)
       return NextResponse.json({ error: "Not authorized" }, { status: 401 });
 
-    const { id } = await req.json();
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    }
+
     await connectMongo();
 
-    // 1. Ищем категорию, чтобы узнать ее имя перед удалением
     const categoryToDelete = await Category.findOne({
       _id: id,
       userId: session.user.id,
@@ -115,10 +132,9 @@ export async function DELETE(req) {
 
     const categoryName = categoryToDelete.name;
 
-    // 2. Удаляем саму категорию
     await Category.deleteOne({ _id: id });
 
-    // 3. Удаляем упоминание этой категории из всех подписок юзера
+    // Чистим подписки
     await Sub.updateMany(
       { userId: session.user.id, categories: categoryName },
       { $pull: { categories: categoryName } },

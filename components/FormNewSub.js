@@ -41,6 +41,37 @@ const FormNewSub = ({ onClose }) => {
     "🎨",
   ];
 
+  // --- ЛОГИКА РАСЧЕТА ДАТЫ ---
+  const calculateNextCharge = (selectedUnit) => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+
+    if (selectedUnit === "/mo") {
+      const currentDay = date.getDate();
+      // 1. Устанавливаем 1-е число, чтобы избежать прыжка через месяц при расчете
+      date.setDate(1);
+      // 2. Переходим на следующий месяц
+      date.setMonth(date.getMonth() + 1);
+      // 3. Пытаемся вернуть исходное число (например, 30-е)
+      // getMonth() здесь вернет уже новый месяц, а setDate проверит, есть ли там столько дней
+      const daysInNextMonth = new Date(
+        date.getFullYear(),
+        date.getMonth() + 1,
+        0,
+      ).getDate();
+      date.setDate(Math.min(currentDay, daysInNextMonth));
+    } else if (selectedUnit === "/y") {
+      // Для года всё проще — просто меняем год
+      date.setFullYear(date.getFullYear() + 1);
+    } else if (selectedUnit === "/wk") {
+      // Для недели оставляем +7 дней, тут календарной магии нет
+      date.setDate(date.getDate() + 7);
+    }
+
+    return date.toISOString();
+  };
+  // ---------------------------
+
   useEffect(() => {
     // Ставим рандомную иконку при загрузке формы
     const randomEmoji =
@@ -123,12 +154,15 @@ const FormNewSub = ({ onClose }) => {
     if (isLoading) return;
     setIsLoading(true);
 
+    const finalNextCharge = calculateNextCharge(unit);
+
     try {
       const data = await axios.post("/api/sub", {
         icon,
         name,
         price: Number(price),
         unit,
+        nextCharge: finalNextCharge,
         categories: selectedCategories,
         note,
       });

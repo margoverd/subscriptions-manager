@@ -38,27 +38,42 @@ export const getBadgeProps = (diffDays) => {
 };
 
 export const getSubData = (sub) => {
-  const createdAt = new Date(sub.createdAt);
-  const nextChargeDate = new Date(sub.nextCharge || sub.createdAt);
+  const createdAt = new Date(sub.createdAt || Date.now());
+  // Если в базе пусто, берем дату создания как точку отсчета
+  let nextChargeDate = sub.nextCharge
+    ? new Date(sub.nextCharge)
+    : new Date(createdAt);
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Логика авто-расчета следующей даты, если она не установлена
-  const isDefaultDate = Math.abs(nextChargeDate - createdAt) < 1000;
+  // ПРОВЕРКА: Если даты следующего платежа нет или она совпадает с датой создания (почти)
+  const isDefaultDate =
+    !sub.nextCharge || Math.abs(nextChargeDate - createdAt) < 1000;
 
-  if (isDefaultDate || !sub.nextCharge) {
-    if (sub.unit === "/mo") nextChargeDate.setMonth(createdAt.getMonth() + 1);
-    else if (sub.unit === "/y")
+  if (isDefaultDate) {
+    // Вычисляем реальную дату следующего платежа
+    if (sub.unit === "/mo") {
+      nextChargeDate = new Date(createdAt);
+      nextChargeDate.setMonth(createdAt.getMonth() + 1);
+    } else if (sub.unit === "/y") {
+      nextChargeDate = new Date(createdAt);
       nextChargeDate.setFullYear(createdAt.getFullYear() + 1);
-    else if (sub.unit === "/wk")
+    } else if (sub.unit === "/wk") {
+      nextChargeDate = new Date(createdAt);
       nextChargeDate.setDate(createdAt.getDate() + 7);
+    }
   }
 
-  const diffTime = nextChargeDate - today;
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  // Обнуляем время для точного сравнения дней
+  const compareTarget = new Date(nextChargeDate);
+  compareTarget.setHours(0, 0, 0, 0);
+
+  const diffTime = compareTarget - today;
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
   return {
-    nextChargeDate,
+    nextChargeDate, // Это то, что мы вывели
     diffDays,
     badge: getBadgeProps(diffDays),
     today,

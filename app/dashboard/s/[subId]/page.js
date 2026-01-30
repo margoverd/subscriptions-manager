@@ -9,6 +9,7 @@ import MenuAvatarPopover from "@/components/MenuAvatarPopover";
 import ButtonDeleteSub from "@/components/ButtonDeleteSub";
 import NoteEditor from "@/components/NoteEditor";
 import ButtonEditSub from "@/components/ButtonEditSub";
+import { getSubData, ALL_STATUSES, getBadgeProps } from "@/libs/constants";
 
 const getSub = async (subId) => {
   const session = await auth();
@@ -39,47 +40,12 @@ export default async function SubAdminPage({ params }) {
   const { subId } = await params;
   const sub = await getSub(subId);
 
+  const { nextChargeDate, badge, today } = getSubData(sub);
   const createdAt = new Date(sub.createdAt);
 
-  // 1. Пытаемся взять дату из поля nextCharge.
-  // Если она совпадает с моментом создания (default),
-  // рассчитываем первый период автоматически.
-  let nextChargeDate = new Date(sub.nextCharge);
+  const statusInfo =
+    ALL_STATUSES.find((s) => s.label === badge.text) || ALL_STATUSES[0];
 
-  // Проверяем: если дата следующего платежа равна дате создания (с точностью до секунд),
-  // значит, пользователь её еще не менял, и нам нужно рассчитать её по циклу (unit)
-  const isDefaultDate = Math.abs(nextChargeDate - createdAt) < 1000;
-
-  if (isDefaultDate) {
-    if (sub.unit === "/mo") nextChargeDate.setMonth(createdAt.getMonth() + 1);
-    else if (sub.unit === "/y")
-      nextChargeDate.setFullYear(createdAt.getFullYear() + 1);
-    else if (sub.unit === "/wk")
-      nextChargeDate.setDate(createdAt.getDate() + 7);
-  }
-
-  // 2. Расчет дней и бейджиков
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Обнуляем время для честного сравнения дат
-
-  const diffTime = nextChargeDate - today;
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-  let badgeText = "Active";
-  let badgeClass = "bg-success/20 text-success border-success/20";
-
-  if (diffDays < 0) {
-    badgeText = "Overdue";
-    badgeClass = "bg-error/20 text-error border-error/20";
-  } else if (diffDays <= 3) {
-    badgeText = "Warning";
-    badgeClass = "bg-error/20 text-error border-error/20";
-  } else if (diffDays <= 7) {
-    badgeText = "Upcoming";
-    badgeClass = "bg-warning/20 text-warning border-warning/20";
-  }
-
-  // 3. Форматирование дат для вывода
   const formattedAddedDate = createdAt.toLocaleDateString("en-US", {
     month: "2-digit",
     day: "2-digit",
@@ -89,12 +55,12 @@ export default async function SubAdminPage({ params }) {
   const formattedNextCharge = nextChargeDate.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
-    // Если год отличается от текущего, показываем его тоже
     year:
       nextChargeDate.getFullYear() !== today.getFullYear()
         ? "numeric"
         : undefined,
   });
+
   return (
     <main className="bg-base-200">
       <header className="max-w-4xl px-4 mx-auto py-4 flex justify-between items-center">
@@ -127,14 +93,25 @@ export default async function SubAdminPage({ params }) {
           <div className="flex justify-between items-baseline">
             <div className="flex items-center flex-wrap gap-1 gap-y-2 mb-2">
               <h3 className="text-xl text-white font-medium leading-tight capitalize mr-4">
-                <span className="text-2xl leading-tight -ml-1">{sub.icon}</span>{" "}
+                <span className="text-2xl leading-tight -ml-1">{sub.icon}</span>
                 {sub.name}
               </h3>
-              <span
-                className={`px-3 py-0.5 text-sm font-normal rounded-lg bg-success/20 text-success border-success/20 ${badgeClass}`}
+              <div
+                className={`relative px-2 py-0.5 text-sm font-medium ${badge.className} rounded-lg`}
               >
-                {badgeText}
-              </span>
+                {badge.text}
+
+                <div
+                  className="tooltip tooltip-top before:max-w-40 before:text-xs before:font-normal absolute -top-1 -right-1"
+                  data-tip={statusInfo.description}
+                >
+                  <span
+                    className={`flex items-center justify-center w-3.5 h-3.5 rounded-full border text-[10px] font-bold cursor-help ${badge.className}`}
+                  >
+                    ?
+                  </span>
+                </div>
+              </div>
             </div>
             <div className="flex gap-1">
               <ButtonEditSub subId={sub._id.toString()} />

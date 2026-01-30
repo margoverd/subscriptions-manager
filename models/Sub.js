@@ -23,8 +23,8 @@ const subSchema = new mongoose.Schema(
     },
     categories: [
       {
-        type: String,
-        trim: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
       },
     ],
     icon: {

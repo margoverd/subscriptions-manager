@@ -1,35 +1,41 @@
 "use client";
 
-import { ALL_STATUSES } from "@/libs/constants";
+import { ALL_STATUSES, getSubData } from "@/libs/constants";
 import { useState } from "react";
+import Icon from "./Icon";
 
-const FilterPanel = ({ extraStyle }) => {
-  const [activeProjects, setActiveProjects] = useState([]);
-  const [activeStatuses, setActiveStatuses] = useState([]);
-  const [sortOrder, setSortOrder] = useState("recent");
+const FilterPanel = ({
+  subscriptions = [],
+  activeCategories = [],
+  setActiveCategories,
+  activeStatuses = [],
+  setActiveStatuses,
+  sortOrder,
+  setSortOrder,
+  allCategories = [],
+  extraStyle,
+}) => {
+  const getCountByStatus = (statusLabel) => {
+    return subscriptions.filter((sub) => {
+      const { badge } = getSubData(sub);
+      return badge.text === statusLabel;
+    }).length;
+  };
 
-  // Переключение проектов (множественный выбор)
-  const toggleProject = (projectName) => {
-    setActiveProjects(
-      (prev) =>
-        prev.includes(projectName)
-          ? prev.filter((p) => p !== projectName) // Удаляем, если уже выбран
-          : [...prev, projectName], // Добавляем, если не выбран
+  const toggleCategory = (name) => {
+    setActiveCategories((prev) =>
+      prev.includes(name) ? prev.filter((p) => p !== name) : [...prev, name],
     );
   };
 
-  // Переключение статусов (множественный выбор)
-  const toggleStatus = (statusLabel) => {
+  const toggleStatus = (label) => {
     setActiveStatuses((prev) =>
-      prev.includes(statusLabel)
-        ? prev.filter((s) => s !== statusLabel)
-        : [...prev, statusLabel],
+      prev.includes(label) ? prev.filter((s) => s !== label) : [...prev, label],
     );
   };
 
-  // Полная очистка
   const clearAll = () => {
-    setActiveProjects([]);
+    setActiveCategories([]);
     setActiveStatuses([]);
     setSortOrder("recent");
   };
@@ -63,11 +69,16 @@ const FilterPanel = ({ extraStyle }) => {
               <span className="relative text-sm text-base-content pr-3">
                 {st.label}
                 <span
-                  className={`absolute w-2 h-2 rounded-full top-0 right-0 ${st.color}`}
-                ></span>
+                  className={`flex items-center justify-center w-3.5 h-3.5 rounded-full border text-[10px] font-bold cursor-help ${st.color} text-base-300 absolute top-0 -right-1 tooltip tooltip-${st.label} tooltip-top before:max-w-40 before:text-sm before:font-normal`}
+                  data-tip={st.description}
+                >
+                  ?
+                </span>
               </span>
             </div>
-            <span className="text-sm text-base-content/70">(0)</span>
+            <span className="text-sm text-base-content/70">
+              ({getCountByStatus(st.label)})
+            </span>
           </label>
         </div>
       ))}
@@ -100,17 +111,17 @@ const FilterPanel = ({ extraStyle }) => {
       </div>
 
       <p className="text-xs text-base-content/70 text-normal mb-3 mt-6">
-        Projects
+        Categories
       </p>
 
       <div className="max-w-7xl mx-auto flex flex-wrap gap-2 mb-4">
-        {["Project 1", "Project 2", "Project 3"].map((cat) => {
+        {allCategories.map((cat) => {
           // Проверяем, включен ли конкретный проект в массив выбранных
-          const isActive = activeProjects.includes(cat);
+          const isActive = activeCategories.includes(cat);
           return (
             <button
               key={cat}
-              onClick={() => toggleProject(cat)}
+              onClick={() => toggleCategory(cat)}
               className={`relative text-sm px-1.5 py-0.5 rounded-lg transition-all border cursor-pointer
                 ${
                   isActive

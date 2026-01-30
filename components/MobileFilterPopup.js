@@ -1,13 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FilterPanel from "@/components/FilterPanel";
+import Icon from "./Icon";
 
-export default function MobileFilterPopup() {
+export default function MobileFilterPopup({
+  activeCategories,
+  setActiveCategories,
+  activeStatuses,
+  setActiveStatuses,
+  sortOrder,
+  setSortOrder,
+  allCategories,
+}) {
   const [open, setOpen] = useState(false);
+  const popoverRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popoverRef.current && !popoverRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
 
   return (
-    <div className="relative flex justify-end md:hidden">
+    <div className="relative flex justify-end md:hidden" ref={popoverRef}>
       <button
         onClick={() => setOpen(true)}
         className="p-2 rounded-md hover:bg-base-200 flex items-center gap-2"
@@ -15,33 +37,33 @@ export default function MobileFilterPopup() {
       >
         <span className="text-sm text-base-content">Filters</span>
 
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M19.2202 6.00019H12.6602C12.395 6.00019 12.1406 6.10554 11.9531 6.29308C11.7655 6.48062 11.6602 6.73497 11.6602 7.00019C11.6602 7.2654 11.7655 7.51976 11.9531 7.70729C12.1406 7.89483 12.395 8.00019 12.6602 8.00019H19.2202C19.4271 8.00019 19.6255 8.08236 19.7717 8.22864C19.918 8.37492 20.0002 8.57332 20.0002 8.78019V9.56019H16.2202C15.955 9.56019 15.7006 9.66554 15.5131 9.85308C15.3255 10.0406 15.2202 10.295 15.2202 10.5602C15.2202 10.8254 15.3255 11.0798 15.5131 11.2673C15.7006 11.4548 15.955 11.5602 16.2202 11.5602H18.5902L17.8902 12.2502C17.7965 12.3431 17.7221 12.4537 17.6713 12.5756C17.6205 12.6975 17.5944 12.8282 17.5944 12.9602C17.5944 13.0922 17.6205 13.2229 17.6713 13.3448C17.7221 13.4666 17.7965 13.5772 17.8902 13.6702C17.9831 13.7639 18.0937 13.8383 18.2156 13.8891C18.3375 13.9398 18.4682 13.966 18.6002 13.966C18.7322 13.966 18.8629 13.9398 18.9848 13.8891C19.1066 13.8383 19.2172 13.7639 19.3102 13.6702L21.1902 11.7902C21.4202 11.561 21.6036 11.2893 21.7302 10.9902V10.8902C21.896 10.5571 21.9881 10.1921 22.0002 9.82019V8.82019C22.0041 8.45212 21.9352 8.08691 21.7974 7.7456C21.6596 7.40428 21.4556 7.09361 21.1972 6.83148C20.9388 6.56935 20.6311 6.36095 20.2918 6.21828C19.9525 6.0756 19.5883 6.00148 19.2202 6.00019V6.00019ZM3.71019 2.29019C3.61695 2.19695 3.50626 2.12299 3.38443 2.07253C3.26261 2.02207 3.13204 1.99609 3.00019 1.99609C2.86833 1.99609 2.73776 2.02207 2.61594 2.07253C2.49411 2.12299 2.38342 2.19695 2.29019 2.29019C2.10188 2.47849 1.99609 2.73388 1.99609 3.00019C1.99609 3.26649 2.10188 3.52188 2.29019 3.71019L5.14019 6.55019C4.786 6.80395 4.4977 7.13879 4.29938 7.52674C4.10105 7.9147 3.99846 8.34448 4.00019 8.78019V9.78019C4.00047 10.1598 4.08232 10.5349 4.24019 10.8802V10.9402C4.36779 11.2417 4.55098 11.5164 4.78019 11.7502L10.1902 17.1502V21.0002C10.1898 21.1701 10.2328 21.3374 10.3151 21.4861C10.3973 21.6348 10.5161 21.7601 10.6602 21.8502C10.8193 21.9488 11.003 22.0008 11.1902 22.0002C11.3467 21.9992 11.5009 21.9616 11.6402 21.8902L15.2002 20.1102C15.3651 20.0271 15.5038 19.8999 15.6009 19.7429C15.6979 19.5858 15.7496 19.4049 15.7502 19.2202V17.2202L20.2602 21.7402C20.3531 21.8339 20.4637 21.9083 20.5856 21.9591C20.7075 22.0098 20.8382 22.036 20.9702 22.036C21.1022 22.036 21.2329 22.0098 21.3548 21.9591C21.4766 21.9083 21.5872 21.8339 21.6802 21.7402C21.7739 21.6472 21.8483 21.5366 21.8991 21.4148C21.9498 21.2929 21.976 21.1622 21.976 21.0302C21.976 20.8982 21.9498 20.7675 21.8991 20.6456C21.8483 20.5237 21.7739 20.4131 21.6802 20.3202L3.71019 2.29019ZM6.00019 8.78019C5.99898 8.62323 6.04639 8.46976 6.13592 8.34084C6.22545 8.21192 6.3527 8.11388 6.50019 8.06019L6.59019 8.00019L8.15019 9.56019H6.00019V8.78019ZM14.0702 16.0702C13.9775 16.1636 13.9042 16.2744 13.8544 16.3963C13.8046 16.5181 13.7794 16.6486 13.7802 16.7802V18.6002L12.2202 19.3802V16.7802C12.2209 16.6486 12.1957 16.5181 12.146 16.3963C12.0962 16.2744 12.0229 16.1636 11.9302 16.0702L7.41019 11.5602H10.1502L14.3702 15.7802L14.0702 16.0702Z"
-            fill="white"
-          />
-        </svg>
+        <Icon name="filter" className="fill-white w-6 h-6" />
       </button>
 
       {open && (
         <>
-          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="absolute top-full right-0 mt-2 w-70 z-100 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="bg-base-100 rounded-2xl shadow-2xl border border-white/10 overflow-hidden relative">
+              {/* Кнопка закрытия */}
+              <button
+                onClick={() => setOpen(false)}
+                className="absolute top-4 right-4 z-120 btn btn-circle btn-sm btn-ghost"
+              >
+                ✕
+              </button>
 
-          <div className="">
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-2 right-3 z-55"
-            >
-              ✕
-            </button>
-
-            <FilterPanel extraStyle="pt-8" />
+              {/* Сама панель */}
+              <FilterPanel
+                activeCategories={activeCategories}
+                setActiveCategories={setActiveCategories}
+                activeStatuses={activeStatuses}
+                setActiveStatuses={setActiveStatuses}
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+                allCategories={allCategories}
+                extraStyle="pt-10 pb-6 shadow-none" // Убираем лишние тени внутри
+              />
+            </div>
           </div>
         </>
       )}

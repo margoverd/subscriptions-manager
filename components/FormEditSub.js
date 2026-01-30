@@ -51,9 +51,12 @@ const FormEditSub = ({ onClose, subId }) => {
         setNote(data.note || "");
         setSelectedCategories(data.categories || []);
 
-        // Форматируем дату для input type="date" (YYYY-MM-DD)
+        // Берем дату из базы (data.nextCharge).
+        // Если она там есть, превращаем её в формат YYYY-MM-DD
         if (data.nextCharge) {
-          setNextCharge(new Date(data.nextCharge).toISOString().split("T")[0]);
+          const dateObj = new Date(data.nextCharge);
+          const formattedDate = dateObj.toISOString().split("T")[0];
+          setNextCharge(formattedDate);
         }
       } catch (error) {
         toast.error("Failed to load subscription data");
@@ -183,8 +186,10 @@ const FormEditSub = ({ onClose, subId }) => {
   };
 
   return (
-    <form onSubmit={handleEditSubscription} className="space-y-1 max-w-lg relative">
-
+    <form
+      onSubmit={handleEditSubscription}
+      className="space-y-1 max-w-lg relative"
+    >
       {/* Оверлей загрузки */}
       {isInitialLoading && (
         <div className="absolute inset-0 z-2000 bg-base-300/70 flex flex-col items-center justify-center animate-fadeIn">

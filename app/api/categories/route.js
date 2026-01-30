@@ -60,22 +60,32 @@ export async function PATCH(req) {
     if (!session)
       return NextResponse.json({ error: "Not authorized" }, { status: 401 });
 
-    const { id, name } = await req.json();
-    if (!id || !name)
-      return NextResponse.json({ error: "Missing data" }, { status: 400 });
-
+    const { id, name: newName } = await req.json();
     await connectMongo();
 
-    const updatedCategory = await Category.findOneAndUpdate(
-      { _id: id, userId: session.user.id },
-      { name },
-      { new: true },
-    );
-
-    if (!updatedCategory)
+    // 1. Находим старое имя
+    const oldCategory = await Category.findOne({
+      _id: id,
+      userId: session.user.id,
+    });
+    if (!oldCategory)
       return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    return NextResponse.json(updatedCategory);
+    const oldName = oldCategory.name;
+
+    // 2. Обновляем категорию
+    oldCategory.name = newName;
+    await oldCategory.save();
+
+    // 3. Обновляем имя во всех подписках, где оно встречалось
+    // Используем позиционный оператор $[], чтобы обновить все элементы массива, совпавшие с условием
+    await Sub.updateMany(
+      { userId: session.user.id, categories: oldName },
+      { $set: { "categories.$[elem]": newName } },
+      { arrayFilters: [{ elem: oldName }] },
+    );
+
+    return NextResponse.json(oldCategory);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -91,16 +101,28 @@ export async function DELETE(req) {
     const { id } = await req.json();
     await connectMongo();
 
-    const deleted = await Category.findOneAndDelete({
+    // 1. Ищем категорию, чтобы узнать ее имя перед удалением
+    const categoryToDelete = await Category.findOne({
       _id: id,
       userId: session.user.id,
     });
 
-    if (!deleted)
+    if (!categoryToDelete)
       return NextResponse.json(
         { error: "Category not found" },
         { status: 404 },
       );
+
+    const categoryName = categoryToDelete.name;
+
+    // 2. Удаляем саму категорию
+    await Category.deleteOne({ _id: id });
+
+    // 3. Удаляем упоминание этой категории из всех подписок юзера
+    await Sub.updateMany(
+      { userId: session.user.id, categories: categoryName },
+      { $pull: { categories: categoryName } },
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {

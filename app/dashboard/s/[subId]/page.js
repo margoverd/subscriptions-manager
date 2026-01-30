@@ -115,7 +115,7 @@ export default async function SubAdminPage({ params }) {
             </div>
             <div className="flex gap-1">
               <ButtonEditSub subId={sub._id.toString()} />
-              <ButtonDeleteSub sub={sub._id.toString()} />
+              <ButtonDeleteSub subId={sub._id.toString()} />
             </div>
           </div>
           <div className="grid md:grid-cols-[1fr_1fr] grid-cols-1 gap-x-4 gap-y-6 items-start">

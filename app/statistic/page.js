@@ -1,6 +1,58 @@
 import DashboardHeader from "@/components/DashboardHeader";
+import { auth } from "@/auth";
+import connectMongo from "@/libs/mongoose";
+import Sub from "@/models/Sub";
 
 export default async function Statistic() {
+  await connectMongo();
+  const session = await auth();
+
+  if (!session) return null;
+
+  // 1. Получаем подписки пользователя
+  const subs = await Sub.find({ userId: session.user.id });
+
+  // Вычисляем общую сумму в месяц (нормализация /y и /mo)
+  const totalMonthly = subs.reduce((acc, sub) => {
+    let price = Number(sub.price) || 0;
+    if (sub.unit === "/y") price = price / 12;
+    return acc + price;
+  }, 0);
+
+  // Ищем самую дорогую (приведенную к месяцу)
+  const mostExpensiveSub =
+    subs.length > 0
+      ? subs.reduce((prev, curr) => {
+          const getMoPrice = (s) => (s.unit === "/y" ? s.price / 12 : s.price);
+          return getMoPrice(prev) > getMoPrice(curr) ? prev : curr;
+        })
+      : null;
+
+  // Ближайший платеж (сортируем по дате nextCharge)
+  const upcomingSub = subs
+    .filter((s) => s.nextCharge) // берем только те, где есть дата
+    .sort((a, b) => new Date(a.nextCharge) - new Date(b.nextCharge))[0];
+
+  // Функция для расчета "через сколько дней" без сторонних библиотек
+  const getDaysUntil = (dateString) => {
+    if (!dateString) return "—";
+
+    const target = new Date(dateString);
+    const today = new Date();
+
+    // Обнуляем часы, чтобы считать только чистые дни
+    target.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    const diffInMs = target - today;
+    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+    if (diffInDays < 0) return "passed";
+    if (diffInDays === 0) return "today";
+    if (diffInDays === 1) return "1 day";
+    return `${diffInDays} days`;
+  };
+
   return (
     <>
       <DashboardHeader />
@@ -10,9 +62,14 @@ export default async function Statistic() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="relative bg-base-100 rounded-xl p-4">
               <p className="text-xs text-base-content mb-6">
-                Next charge - <span className="font-bold">in 3 days</span>
+                Next charge -{" "}
+                <span className="font-bold">
+                  in {getDaysUntil(upcomingSub?.nextCharge)}
+                </span>
               </p>
-              <p className="text-3xl font-bold text-primary-content">$10.99</p>
+              <p className="text-3xl font-bold text-primary-content">
+                ${upcomingSub?.price || "0"}
+              </p>
               <div className="absolute bottom-4 right-4 h-10 w-10 flex items-center justify-center rounded-full bg-secondary/10">
                 <svg
                   className="w-6 h-6"
@@ -32,7 +89,9 @@ export default async function Statistic() {
               <p className="text-xs text-base-content mb-6">
                 Active subscriptions
               </p>
-              <p className="text-3xl font-bold text-primary-content">12</p>
+              <p className="text-3xl font-bold text-primary-content">
+                {subs.length}
+              </p>
               <div className="absolute bottom-4 right-4 h-10 w-10 flex items-center justify-center rounded-full bg-success/10">
                 <svg
                   className="w-6 h-6"
@@ -54,7 +113,8 @@ export default async function Statistic() {
                 You spend in total
               </p>
               <p className="text-3xl font-bold text-primary-content">
-                $74<span className="font-normal text-[12px]">/mo</span>
+                ${totalMonthly.toFixed(2)}
+                <span className="font-normal text-[12px]">/mo</span>
               </p>
               <div className="absolute bottom-4 right-4 h-10 w-10 flex items-center justify-center rounded-full bg-warning/10">
                 <svg
@@ -74,7 +134,8 @@ export default async function Statistic() {
             <div className="relative bg-base-100 rounded-xl p-4">
               <p className="text-xs text-base-content mb-6">Most expensive</p>
               <p className="text-3xl font-bold text-primary-content">
-                $19.99<span className="font-normal text-[12px]">/mo</span>
+                ${mostExpensiveSub?.price || "0"}
+                <span className="font-normal text-[12px]">{mostExpensiveSub?.unit}</span>
               </p>
               <div className="absolute bottom-4 right-4 h-10 w-10 flex items-center justify-center rounded-full bg-accent/10">
                 <svg

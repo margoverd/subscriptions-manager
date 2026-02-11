@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import ButtonLogout from "./ButtonLogout";
 import Image from "next/image";
 import { useSession } from "./SessionProvider";
+import Icon from "./Icon";
+import Link from "next/link";
 
 export default function MenuAvatarPopover({ extraStyles }) {
   const session = useSession();
@@ -79,6 +81,25 @@ export default function MenuAvatarPopover({ extraStyles }) {
                 {user?.email || "user@email.com"}
               </div>
             </div>
+            <Link
+              href="/settings"
+              className="px-3 py-2 w-full flex justify-between items-center rounded-lg border-none text-base-content/70 hover:text-base-content font-normal hover:bg-base-300 transition-colors cursor-pointer shadow-none mb-0.5"
+            >
+              <span className="text-sm">Settings</span>
+              <span className="swap swap-rotate">
+                {/* this hidden checkbox controls the state */}
+                <input type="checkbox" />
+                <Icon name="setting" className="text-xl font-normal" />
+              </span>
+            </Link>
+
+            {/* <button className="px-3 py-2 w-full flex justify-between items-center rounded-lg border-none text-base-content/70 hover:text-base-content font-normal hover:bg-base-300 transition-colors cursor-pointer shadow-none">
+              <span className="text-sm">Snowfall</span>
+              <input
+                type="checkbox"
+                className="toggle toggle-sm toggle-primary"
+              />
+            </button> */}
           </div>
 
           <div className="divider my-2" />

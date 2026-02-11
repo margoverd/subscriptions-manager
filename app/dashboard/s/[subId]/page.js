@@ -24,14 +24,6 @@ const getSub = async (subId) => {
     redirect("/dashboard");
   }
 
-  // const existingCats = await Category.find({}, "name");
-  // const existingNames = existingCats.map((c) => c.name);
-
-  // const subObj = sub.toObject();
-  // subObj.categories = (subObj.categories || []).filter((cat) =>
-  //   existingNames.includes(cat),
-  // );
-
   return sub.toObject();
 };
 

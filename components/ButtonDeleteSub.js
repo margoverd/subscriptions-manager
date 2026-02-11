@@ -35,7 +35,7 @@ const ButtonDeleteSub = ({ subId }) => {
         className="btn btn-ghost btn-circle text-error border-none shadow-none hover:bg-error/20"
         aria-label="Delete Sub"
       >
-        <Icon name="trash-alt" className="text-xl" />
+        <Icon name="trash-alt" className="" />
       </button>
     </>
   );

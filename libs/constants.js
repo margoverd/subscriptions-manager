@@ -39,33 +39,34 @@ export const getBadgeProps = (diffDays) => {
 
 export const getSubData = (sub) => {
   const createdAt = new Date(sub.createdAt || Date.now());
-  // Если в базе пусто, берем дату создания как точку отсчета
+
+  // 1. Берем дату из базы (если есть) или используем дату создания
   let nextChargeDate = sub.nextCharge
     ? new Date(sub.nextCharge)
     : new Date(createdAt);
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0); // Обнуляем время для точности
 
-  // ПРОВЕРКА: Если даты следующего платежа нет или она совпадает с датой создания (почти)
-  const isDefaultDate =
-    !sub.nextCharge || Math.abs(nextChargeDate - createdAt) < 1000;
-
-  if (isDefaultDate) {
-    // Вычисляем реальную дату следующего платежа
-    if (sub.unit === "/mo") {
-      nextChargeDate = new Date(createdAt);
-      nextChargeDate.setMonth(createdAt.getMonth() + 1);
-    } else if (sub.unit === "/y") {
-      nextChargeDate = new Date(createdAt);
-      nextChargeDate.setFullYear(createdAt.getFullYear() + 1);
-    } else if (sub.unit === "/wk") {
-      nextChargeDate = new Date(createdAt);
-      nextChargeDate.setDate(createdAt.getDate() + 7);
+  // 2. ЦИКЛ АВТООБНОВЛЕНИЯ:
+  // Если дата платежа уже в прошлом (меньше сегодня),
+  // прибавляем период, пока она не станет будущей или сегодняшней.
+  // Это заставляет подписку "идти по кругу"
+  if (sub.unit) {
+    while (nextChargeDate < today) {
+      if (sub.unit === "/mo") {
+        nextChargeDate.setMonth(nextChargeDate.getMonth() + 1);
+      } else if (sub.unit === "/y") {
+        nextChargeDate.setFullYear(nextChargeDate.getFullYear() + 1);
+      } else if (sub.unit === "/wk") {
+        nextChargeDate.setDate(nextChargeDate.getDate() + 7);
+      } else {
+        break; // Если юнит странный, выходим из цикла
+      }
     }
   }
 
-  // Обнуляем время для точного сравнения дней
+  // 3. Считаем разницу в днях уже для обновленной даты
   const compareTarget = new Date(nextChargeDate);
   compareTarget.setHours(0, 0, 0, 0);
 
@@ -73,7 +74,7 @@ export const getSubData = (sub) => {
   const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
   return {
-    nextChargeDate, // Это то, что мы вывели
+    nextChargeDate,
     diffDays,
     badge: getBadgeProps(diffDays),
     today,

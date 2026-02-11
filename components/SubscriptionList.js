@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import FilterPanel from "./FilterPanel";
 import SubscriptionCard from "./SubscriptionCard";
 import MobileFilterPopup from "./MobileFilterPopup";
+import { getSubData } from "@/libs/constants";
 
 export default function SubscriptionList({ initialSubs, availableCategories }) {
   const [activeCategories, setActiveCategories] = useState([]);
@@ -13,11 +14,11 @@ export default function SubscriptionList({ initialSubs, availableCategories }) {
   const filteredSubs = useMemo(() => {
     let result = [...initialSubs];
 
-    // 1. Фильтр по статусам (нужно вычислить статус для каждой подписки)
+    // 1. Используем getSubData для фильтрации
     if (activeStatuses.length > 0) {
       result = result.filter((sub) => {
-        const status = calculateStatus(sub); // Функция ниже
-        return activeStatuses.includes(status);
+        const { badge } = getSubData(sub);
+        return activeStatuses.includes(badge.text);
       });
     }
 
@@ -77,19 +78,4 @@ export default function SubscriptionList({ initialSubs, availableCategories }) {
       </main>
     </div>
   );
-}
-
-// Вспомогательная функция для расчета статуса (та же логика, что была в Dashboard)
-function calculateStatus(sub) {
-  const createdAt = new Date(sub.createdAt);
-  const nextChargeDate = new Date(sub.nextCharge || sub.createdAt); // Используем сохраненную дату или расчетную
-
-  // (Логика расчета diffDays...)
-  const diffDays = Math.ceil(
-    (nextChargeDate - new Date()) / (1000 * 60 * 60 * 24),
-  );
-
-  if (diffDays <= 3) return "Warning";
-  if (diffDays <= 7) return "Upcoming";
-  return "Active";
 }

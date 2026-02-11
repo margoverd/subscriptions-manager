@@ -99,20 +99,17 @@ const FormEditSub = ({ onClose, subId }) => {
   }, []);
 
   // Переключение проектов (множественный выбор)
-  const toggleCategory = (categoryName) => {
+  const toggleCategory = (catId) => {
     setSelectedCategories((prev) => {
-      // Приводим все к именам (строкам) для простоты сравнения
-      const prevNames = prev.map((item) =>
-        typeof item === "object" ? item.name : item,
+      // Приводим все элементы к строкам (ID), на случай если там объекты
+      const currentIds = prev.map((item) =>
+        typeof item === "object" ? item._id : item,
       );
 
-      if (prevNames.includes(categoryName)) {
-        return prev.filter(
-          (item) =>
-            (typeof item === "object" ? item.name : item) !== categoryName,
-        );
+      if (currentIds.includes(catId)) {
+        return currentIds.filter((id) => id !== catId);
       } else {
-        return [...prev, categoryName];
+        return [...currentIds, catId];
       }
     });
   };
@@ -152,6 +149,11 @@ const FormEditSub = ({ onClose, subId }) => {
     if (isLoading) return;
     setIsLoading(true);
 
+    // Извлекаем только ID из выбранных категорий
+    const categoriesIds = selectedCategories.map((c) =>
+      typeof c === "object" ? c._id : c,
+    );
+
     try {
       await axios.patch("/api/sub", {
         subId,
@@ -159,7 +161,7 @@ const FormEditSub = ({ onClose, subId }) => {
         name,
         price: Number(price),
         unit,
-        categories: selectedCategories,
+        categories: categoriesIds,
         note,
         nextCharge,
       });
@@ -369,17 +371,16 @@ const FormEditSub = ({ onClose, subId }) => {
                 {allCategories.map((cat) => {
                   // Проверяем, есть ли категория с таким именем в массиве выбранных
                   const isActive = selectedCategories.some((selected) => {
-                    // Если в базе лежат строки - сравниваем строку со строкой
-                    // Если объекты - сравниваем свойство name
-                    const selectedName =
-                      typeof selected === "object" ? selected.name : selected;
-                    return selectedName === cat.name;
+                    // Приводим всё к строке, так как из API может прийти объект ObjectId
+                    const selectedId =
+                      typeof selected === "object" ? selected._id : selected;
+                    return String(selectedId) === String(cat._id);
                   });
                   return (
                     <button
                       key={cat._id}
                       type="button"
-                      onClick={() => toggleCategory(cat.name)}
+                      onClick={() => toggleCategory(cat._id)}
                       className={`relative text-sm px-1.5 py-0.5 rounded-lg transition-all border cursor-pointer
                       ${
                         isActive

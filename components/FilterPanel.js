@@ -22,9 +22,9 @@ const FilterPanel = ({
     }).length;
   };
 
-  const toggleCategory = (name) => {
+  const toggleCategory = (id) => {
     setActiveCategories((prev) =>
-      prev.includes(name) ? prev.filter((p) => p !== name) : [...prev, name],
+      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id],
     );
   };
 
@@ -116,12 +116,14 @@ const FilterPanel = ({
 
       <div className="max-w-7xl mx-auto flex flex-wrap gap-2 mb-4">
         {allCategories.map((cat) => {
+          // Проверка: если cat вдруг undefined или у него нет _id, пропускаем его
+          if (!cat || !cat._id) return null;
           // Проверяем, включен ли конкретный проект в массив выбранных
-          const isActive = activeCategories.includes(cat);
+          const isActive = activeCategories.includes(cat._id);
           return (
             <button
-              key={cat}
-              onClick={() => toggleCategory(cat)}
+              key={cat._id}
+              onClick={() => toggleCategory(cat._id)}
               className={`relative text-sm px-1.5 py-0.5 rounded-lg transition-all border cursor-pointer
                 ${
                   isActive
@@ -130,7 +132,7 @@ const FilterPanel = ({
                 }
               `}
             >
-              {cat}
+              {cat.name}
             </button>
           );
         })}

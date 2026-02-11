@@ -44,13 +44,7 @@ export async function POST(req) {
 
     return NextResponse.json(newCategory);
   } catch (error) {
-    if (error.name === "ValidationError") {
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    }
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
@@ -61,44 +55,23 @@ export async function PATCH(req) {
     if (!session)
       return NextResponse.json({ error: "Not authorized" }, { status: 401 });
 
-    const body = await req.json();
-    const { id, name: newName } = body;
-
-    if (!id || !newName) {
-      return NextResponse.json(
-        { error: "ID and Name are required" },
-        { status: 400 },
-      );
-    }
+    const { id, name: newName } = await req.json();
 
     await connectMongo();
 
-    // 1. Находим категорию
-    const oldCategory = await Category.findOne({
-      _id: id,
-      userId: session.user.id,
-    });
-
-    if (!oldCategory)
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
-
-    const oldName = oldCategory.name;
-
-    // 2. Обновляем саму категорию
-    oldCategory.name = newName;
-    await oldCategory.save();
-
-    // 3. Обновляем имя во всех подписках юзера
-    // Пользуемся тем, что Mongo умеет искать и заменять элементы в массивах
-    await Sub.updateMany(
-      { userId: session.user.id, categories: oldName },
-      { $set: { "categories.$[elem]": newName } },
-      { arrayFilters: [{ elem: oldName }] },
+    // Просто обновляем имя в коллекции категорий.
+    // В подписках (Sub) лежат ID, которые НЕ МЕНЯЮТСЯ при переименовании,
+    const updatedCategory = await Category.findOneAndUpdate(
+      { _id: id, userId: session.user.id },
+      { name: newName },
+      { new: true },
     );
 
-    return NextResponse.json(oldCategory);
+    if (!updatedCategory)
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    return NextResponse.json(updatedCategory);
   } catch (error) {
-    console.error("PATCH CATEGORY ERROR:", error); // Чтобы видеть ошибку в терминале
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -113,31 +86,28 @@ export async function DELETE(req) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
 
-    if (!id) {
+    if (!id)
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
-    }
 
     await connectMongo();
 
-    const categoryToDelete = await Category.findOne({
+    // 1. Удаляем саму категорию
+    const result = await Category.deleteOne({
       _id: id,
       userId: session.user.id,
     });
 
-    if (!categoryToDelete)
+    if (result.deletedCount === 0) {
       return NextResponse.json(
         { error: "Category not found" },
         { status: 404 },
       );
+    }
 
-    const categoryName = categoryToDelete.name;
-
-    await Category.deleteOne({ _id: id });
-
-    // Чистим подписки
+    // 2. Удаляем этот ID из всех массивов categories в подписках
     await Sub.updateMany(
-      { userId: session.user.id, categories: categoryName },
-      { $pull: { categories: categoryName } },
+      { userId: session.user.id, categories: id },
+      { $pull: { categories: id } },
     );
 
     return NextResponse.json({ success: true });

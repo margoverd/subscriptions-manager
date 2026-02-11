@@ -96,7 +96,7 @@ const FormNewSub = ({ onClose }) => {
 
   // Переключение проектов (множественный выбор)
   const toggleCategory = (category) => {
-    const name = typeof category === "object" ? category.name : category;
+    const catId = typeof category === "object" ? category._id : category;
 
     setSelectedCategories((prev) =>
       prev.includes(category)
@@ -341,12 +341,12 @@ const FormNewSub = ({ onClose }) => {
             ) : (
               <>
                 {allCategories.map((cat) => {
-                  const isActive = selectedCategories.includes(cat.name);
+                  const isActive = selectedCategories.includes(cat._id);
                   return (
                     <button
                       key={cat._id}
                       type="button"
-                      onClick={() => toggleCategory(cat.name)}
+                      onClick={() => toggleCategory(cat._id)}
                       className={`relative text-sm px-1.5 py-0.5 rounded-lg transition-all border cursor-pointer
                       ${
                         isActive

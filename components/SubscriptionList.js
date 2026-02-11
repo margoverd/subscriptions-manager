@@ -24,7 +24,10 @@ export default function SubscriptionList({ initialSubs, availableCategories }) {
     // 2. Фильтр по проектам (категориям)
     if (activeCategories.length > 0) {
       result = result.filter((sub) =>
-        sub.categories.some((cat) => activeCategories.includes(cat)),
+        sub.categories?.some((catId) =>
+          // Приводим всё к строке на случай, если где-то затесался объект ObjectId
+          activeCategories.includes(catId.toString()),
+        ),
       );
     }
 
@@ -37,9 +40,9 @@ export default function SubscriptionList({ initialSubs, availableCategories }) {
     return result;
   }, [initialSubs, activeCategories, activeStatuses, sortOrder]);
 
-  const allCategories = useMemo(() => {
-    return [...new Set(initialSubs.flatMap((s) => s.categories || []))];
-  }, [initialSubs]);
+  // const allCategories = useMemo(() => {
+  //   return [...new Set(initialSubs.flatMap((s) => s.categories || []))];
+  // }, [initialSubs]);
 
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[minmax(248px,248px)_1fr] items-stretch gap-4">

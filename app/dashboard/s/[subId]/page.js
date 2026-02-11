@@ -13,27 +13,26 @@ import { getSubData, ALL_STATUSES, getBadgeProps } from "@/libs/constants";
 
 const getSub = async (subId) => {
   const session = await auth();
-
   await connectMongo();
 
   const sub = await Sub.findOne({
     _id: subId,
     userId: session?.user?.id,
-  });
+  }).populate("categories");
 
   if (!sub) {
     redirect("/dashboard");
   }
 
-  const existingCats = await Category.find({}, "name");
-  const existingNames = existingCats.map((c) => c.name);
+  // const existingCats = await Category.find({}, "name");
+  // const existingNames = existingCats.map((c) => c.name);
 
-  const subObj = sub.toObject();
-  subObj.categories = (subObj.categories || []).filter((cat) =>
-    existingNames.includes(cat),
-  );
+  // const subObj = sub.toObject();
+  // subObj.categories = (subObj.categories || []).filter((cat) =>
+  //   existingNames.includes(cat),
+  // );
 
-  return subObj;
+  return sub.toObject();
 };
 
 export default async function SubAdminPage({ params }) {
@@ -131,10 +130,10 @@ export default async function SubAdminPage({ params }) {
                 {sub.categories && sub.categories.length > 0 ? (
                   sub.categories.map((cat) => (
                     <span
-                      key={cat}
+                      key={cat._id.toString()}
                       className="text-xs px-2.5 py-1 bg-base-200 text-base-content/80 rounded-lg border border-white/5"
                     >
-                      {cat}
+                      {cat.name}
                     </span>
                   ))
                 ) : (

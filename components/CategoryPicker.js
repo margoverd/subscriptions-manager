@@ -46,7 +46,17 @@ const CategoryPicker = ({
       e.stopPropagation();
     }
 
+    const nameTrimmed = newCategoryName.trim();
     if (!newCategoryName.trim() || isAdding) return;
+
+    const isDuplicate = categories.some(
+      (c) => c.name.toLowerCase() === nameTrimmed.toLowerCase(),
+    );
+
+    if (isDuplicate) {
+      toast.error("Category with this name already exists");
+      return;
+    }
 
     setIsAdding(true);
     setEditingId(null);
@@ -70,7 +80,18 @@ const CategoryPicker = ({
 
   // 3. Сохранение редактирования
   const saveEdit = async (id) => {
-    if (!editValue.trim()) return;
+    const nameTrimmed = editValue.trim();
+    if (!nameTrimmed) return;
+
+    const isDuplicate = categories.some(
+      (c) => c._id !== id && c.name.toLowerCase() === nameTrimmed.toLowerCase(),
+    );
+
+    if (isDuplicate) {
+      toast.error("Another category already has this name");
+      return;
+    }
+
     setIsSaving(true);
     try {
       const res = await axios.patch("/api/categories", { id, name: editValue });
@@ -95,7 +116,7 @@ const CategoryPicker = ({
 
     try {
       await axios.delete(`/api/categories?id=${id}`);
-      
+
       // Находим имя удаляемой категории перед тем как убрать её из списка
       const categoryToDelete = categories.find((c) => c._id === id);
 
@@ -116,14 +137,14 @@ const CategoryPicker = ({
     }
   };
 
-  const toggleSelect = (name) => {
+  const toggleSelect = (id) => {
     setSelectedCategories((prev) =>
-      prev.includes(name) ? prev.filter((c) => c !== name) : [...prev, name],
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
     );
   };
 
   return (
-    <div className="w-[280px] bg-[#222222] rounded-xl shadow-2xl border border-white/10 text-base-content flex flex-col gap-2 transition-all duration-300 ease-in-out overflow-hidden">
+    <div className="w-70 bg-[#222222] rounded-xl shadow-2xl border border-white/10 text-base-content flex flex-col gap-2 transition-all duration-300 ease-in-out overflow-hidden">
       {/* ВЕРХНЯЯ ЧАСТЬ */}
       <div className="flex gap-2 p-2">
         <input
@@ -171,14 +192,14 @@ const CategoryPicker = ({
         ) : (
           categories.map((category) => {
             const isEditing = editingId === category._id;
-            const isSelected = selectedCategories.includes(category.name);
+            const isSelected = selectedCategories.includes(category._id);
 
             return (
               <div
                 key={category._id}
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleSelect(category.name);
+                  toggleSelect(category._id);
                 }}
                 className={`group flex items-center gap-1 justify-between py-1 rounded-lg transition-all duration-200 cursor-pointer ${
                   isEditing ? "px-0" : "px-3 hover:bg-white/5"

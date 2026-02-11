@@ -17,9 +17,9 @@ export async function GET(req) {
 
     await connectMongo();
 
-    // Сначала получаем список имен всех существующих категорий
-    const existingCats = await Category.find({}, "name");
-    const existingNames = existingCats.map((c) => c.name);
+    // 1. Получаем ID всех существующих категорий (превращаем их в строки для сравнения)
+    const existingCats = await Category.find({}, "_id");
+    const existingIds = existingCats.map((c) => c._id.toString());
 
     if (subId) {
       const sub = await Sub.findOne({
@@ -31,21 +31,21 @@ export async function GET(req) {
         return NextResponse.json({ error: "Sub not found" }, { status: 404 });
       }
 
-      // Фильтруем категории "на лету"
       const subObj = sub.toObject();
-      subObj.categories = (subObj.categories || []).filter((cat) =>
-        existingNames.includes(cat),
+      // Фильтруем ID категорий: оставляем только те, что реально существуют в базе
+      subObj.categories = (subObj.categories || []).filter((catId) =>
+        existingIds.includes(catId.toString()),
       );
 
       return NextResponse.json(subObj);
     }
 
-    // Если subId нет, отдаем все подписки пользователя
+    // Если subId нет
     const subs = await Sub.find({ userId: session.user.id });
     const filteredSubs = subs.map((sub) => {
       const s = sub.toObject();
-      s.categories = (s.categories || []).filter((cat) =>
-        existingNames.includes(cat),
+      s.categories = (s.categories || []).filter((catId) =>
+        existingIds.includes(catId.toString()),
       );
       return s;
     });

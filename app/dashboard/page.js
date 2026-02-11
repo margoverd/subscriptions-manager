@@ -9,6 +9,7 @@ import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
 import Sub from "@/models/Sub";
 import SubscriptionList from "@/components/SubscriptionList";
+import Category from "@/models/Category";
 
 async function getUser() {
   const session = await auth();
@@ -21,12 +22,19 @@ async function getUser() {
 }
 
 export default async function Dashboard() {
-  const user = await getUser();
+  // const user = await getUser();
+  const session = await auth();
+  await connectMongo();
 
-  const initialSubs = JSON.parse(JSON.stringify(user.subs));
-  const allUsedCategories = [
-    ...new Set(initialSubs.flatMap((s) => s.categories || [])),
-  ];
+  // 1. Загружаем подписки
+  const subs = await Sub.find({ userId: session.user.id }).lean();
+
+  // 2. Загружаем ВСЕ категории этого пользователя из базы
+  const categories = await Category.find({ userId: session.user.id }).lean();
+
+  // Превращаем в чистый JSON для клиентских компонентов
+  const initialSubs = JSON.parse(JSON.stringify(subs));
+  const availableCategories = JSON.parse(JSON.stringify(categories));
 
   return (
     <>
@@ -34,7 +42,7 @@ export default async function Dashboard() {
       <div className="px-5 md:px-10 lg:px-15">
         <SubscriptionList
           initialSubs={initialSubs}
-          availableCategories={allUsedCategories}
+          availableCategories={availableCategories}
         />
       </div>
     </>

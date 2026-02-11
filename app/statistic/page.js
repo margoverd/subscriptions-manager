@@ -4,6 +4,13 @@ import connectMongo from "@/libs/mongoose";
 import Sub from "@/models/Sub";
 import { getSubData } from "@/libs/constants";
 
+const getDaysUntil = (date) => {
+  if (!date) return "0 days";
+  const diff = new Date(date) - new Date();
+  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  return days > 0 ? `${days} days` : "today";
+};
+
 export default async function Statistic() {
   await connectMongo();
   const session = await auth();
@@ -48,7 +55,7 @@ export default async function Statistic() {
   };
 
   const statusInfo = upcomingSub?.meta?.badge;
-  
+
   return (
     <>
       <DashboardHeader />

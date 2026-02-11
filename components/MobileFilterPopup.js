@@ -5,6 +5,7 @@ import FilterPanel from "@/components/FilterPanel";
 import Icon from "./Icon";
 
 export default function MobileFilterPopup({
+  subscriptions,
   activeCategories,
   setActiveCategories,
   activeStatuses,
@@ -54,6 +55,7 @@ export default function MobileFilterPopup({
 
               {/* Сама панель */}
               <FilterPanel
+                subscriptions={subscriptions}
                 activeCategories={activeCategories}
                 setActiveCategories={setActiveCategories}
                 activeStatuses={activeStatuses}

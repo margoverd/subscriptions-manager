@@ -13,6 +13,7 @@ const FilterPanel = ({
   sortOrder,
   setSortOrder,
   allCategories = [],
+  clearAll,
   extraStyle,
 }) => {
   const getCountByStatus = (statusLabel) => {
@@ -32,12 +33,6 @@ const FilterPanel = ({
     setActiveStatuses((prev) =>
       prev.includes(label) ? prev.filter((s) => s !== label) : [...prev, label],
     );
-  };
-
-  const clearAll = () => {
-    setActiveCategories([]);
-    setActiveStatuses([]);
-    setSortOrder("recent");
   };
 
   return (

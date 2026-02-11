@@ -37,14 +37,14 @@ export default async function Dashboard() {
   const availableCategories = JSON.parse(JSON.stringify(categories));
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <DashboardHeader />
-      <div className="px-5 md:px-10 lg:px-15">
+      <div className="px-5 md:px-10 lg:px-15   flex-1 pb-20 mt-2">
         <SubscriptionList
           initialSubs={initialSubs}
           availableCategories={availableCategories}
         />
       </div>
-    </>
+    </div>
   );
 }

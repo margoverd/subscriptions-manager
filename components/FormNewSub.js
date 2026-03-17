@@ -48,11 +48,11 @@ const FormNewSub = ({ onClose }) => {
 
     if (selectedUnit === "/mo") {
       const currentDay = date.getDate();
-      // 1. Устанавливаем 1-е число, чтобы избежать прыжка через месяц при расчете
+      // 1. Устанавливаем 1е число, чтобы избежать прыжка через месяц при расчете
       date.setDate(1);
       // 2. Переходим на следующий месяц
       date.setMonth(date.getMonth() + 1);
-      // 3. Пытаемся вернуть исходное число (например, 30-е)
+      // 3. Пытаемся вернуть исходное число
       // getMonth() здесь вернет уже новый месяц, а setDate проверит, есть ли там столько дней
       const daysInNextMonth = new Date(
         date.getFullYear(),
@@ -61,10 +61,10 @@ const FormNewSub = ({ onClose }) => {
       ).getDate();
       date.setDate(Math.min(currentDay, daysInNextMonth));
     } else if (selectedUnit === "/y") {
-      // Для года всё проще — просто меняем год
+      // Для года просто меняем год
       date.setFullYear(date.getFullYear() + 1);
     } else if (selectedUnit === "/wk") {
-      // Для недели оставляем +7 дней, тут календарной магии нет
+      // Для недели оставляем +7 дней
       date.setDate(date.getDate() + 7);
     }
 

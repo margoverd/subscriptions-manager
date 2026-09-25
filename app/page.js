@@ -137,12 +137,33 @@ export default async function Home() {
                   </div>
                 </div>
               </div>
-              <div className="lg:flex hidden justify-center items-center max-w-lg w-full bg-base-300 border-1 rounded-2xl border-base-100">
-                <p className="text-base-content/20 text-sm max-w-xs text-center">
-                  Oops, no demo yet :( <br />
-                  The final details are still being polished before showing how
-                  SubStop works!
-                </p>
+
+              {/* ЗАМЕНЕНО: Видео плеер с автозапуском при скролле и контроллами */}
+              <div className="lg:flex hidden justify-center items-center max-w-lg w-full bg-base-300 border-1 rounded-2xl border-base-100 overflow-hidden shadow-lg">
+                <video
+                  ref={(videoRef) => {
+                    if (!videoRef) return;
+                    const observer = new IntersectionObserver(
+                      ([entry]) => {
+                        if (entry.isIntersecting) {
+                          videoRef.play().catch(() => {
+                            // Автовоспроизведение заблокировано браузером (если вдруг без muted)
+                          });
+                        } else {
+                          videoRef.pause();
+                        }
+                      },
+                      { threshold: 0.5 }, // Срабатывает, когда видео видно на 50%
+                    );
+                    observer.observe(videoRef);
+                  }}
+                  src="/substop-darbiba.mp4" // Замените на путь к вашему видео
+                  controls
+                  muted
+                  playsInline
+                  loop
+                  className="w-full h-auto object-cover rounded-2xl"
+                />
               </div>
             </div>
             <ButtonLogin session={session} className="sm:hidden flex">

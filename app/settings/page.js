@@ -31,9 +31,7 @@ export default async function SettingsPage() {
           <span className="hidden sm:inline">Back</span>
         </Link>
 
-        <h1 className="text-xl md:text-2xl truncate">
-          Account Settings
-        </h1>
+        <h1 className="text-xl md:text-2xl truncate">Account Settings</h1>
 
         <MenuAvatarPopover user={session.user} />
       </header>
@@ -83,6 +81,43 @@ export default async function SettingsPage() {
                 {session.user.id}
               </span>
             </div>
+          </div>
+        </section>
+
+        {/* Объединенная секция Support & Legal */}
+        <section className="bg-base-100 p-4 md:p-6 rounded-2xl border border-white/5 shadow-xl">
+          <h2 className="text-lg font-semibold mb-4">Support & Legal</h2>
+          <div className="grid grid-cols-1 gap-3">
+            <Link
+              href="/privacy-policy"
+              className="flex items-center justify-between p-4 bg-base-200/50 rounded-xl hover:bg-base-200 transition-colors group"
+            >
+              <span className="text-sm">Privacy Policy</span>
+              <Icon
+                name="angle-right"
+                className="group-hover:translate-x-1 transition-transform opacity-50"
+              />
+            </Link>
+            <Link
+              href="/tos"
+              className="flex items-center justify-between p-4 bg-base-200/50 rounded-xl hover:bg-base-200 transition-colors group"
+            >
+              <span className="text-sm">Terms of Service</span>
+              <Icon
+                name="angle-right"
+                className="group-hover:translate-x-1 transition-transform opacity-50"
+              />
+            </Link>
+            <a
+              href="mailto:margarita0work@gmail.com"
+              className="flex items-center justify-between p-4 bg-primary/5 border border-primary/10 rounded-xl hover:bg-primary/10 transition-colors group"
+            >
+              <div className="flex items-center gap-3">
+                <Icon name="envelope" className="text-primary text-lg" />
+                <span className="text-sm font-medium">Contact Support</span>
+              </div>
+              <Icon name="external-link-alt" className="text-xs opacity-50" />
+            </a>
           </div>
         </section>
 

@@ -201,7 +201,7 @@ export async function PATCH(req) {
 
     return NextResponse.json(updatedSub);
   } catch (error) {
-    console.error("PATCH ERROR:", error); // Это поможет тебе видеть детали в терминале
+    console.error("PATCH ERROR:", error); // Чтобы видеть детали в терминале
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

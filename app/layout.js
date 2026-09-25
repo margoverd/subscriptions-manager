@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
@@ -13,21 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="dark" className={`scroll-smooth`}>
-      <head>
-        {/* Twitter Card */}
-        <meta property="og:type" content="summary" />
-        <meta property="og:title" content="SubStop" />
-        <meta
-          property="og:description"
-          content="all-in-one subscriptions manager"
-        />
-        <meta property="og:url" content="https://substop.cc/" />
-        <meta property="og:image" content="/images/meta-image.jpg" />
-      </head>
-      <body className={`${inter.className}`}>
-        {children}
-        <Analytics />
-      </body>
+      <body className={`${inter.className}`}>{children}</body>
     </html>
   );
 }

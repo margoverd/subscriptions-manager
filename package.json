@@ -10,12 +10,18 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.10.0",
-    "@vercel/analytics": "^1.5.0",
+    "@vercel/analytics": "^2.0.1",
+    "axios": "^1.20.0",
+    "canvas-confetti": "^1.9.4",
+    "emoji-picker-react": "^4.22.2",
     "mongodb": "^6.20.0",
-    "next": "15.5.2",
+    "mongoose": "^9.1.5",
+    "next": "^15.1.0",
     "next-auth": "^5.0.0-beta.29",
-    "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.6.0",
+    "tailwind-scrollbar": "^4.0.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
